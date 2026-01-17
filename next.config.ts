@@ -2,12 +2,12 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 1. IGNORER LES ERREURS TYPESCRIPT (Toujours valide)
+  // On ignore les erreurs TypeScript pour le build
   typescript: {
     ignoreBuildErrors: true,
   },
 
-  // 2. AUTORISER LES IMAGES
+  // Configuration des images
   images: {
     remotePatterns: [
       {
@@ -26,22 +26,6 @@ const nextConfig = {
         pathname: '**',
       },
     ],
-  },
-
-  // 3. CORRECTIF WEBPACK
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        module: false,
-        path: false,
-        os: false,
-        v8: false,
-        perf_hooks: false,
-      };
-    }
-    return config;
   },
 };
 
