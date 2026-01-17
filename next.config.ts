@@ -2,10 +2,7 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 1. IGNORER LES ERREURS STRICTES (INDISPENSABLE POUR VERCEL RAPIDE)
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // 1. IGNORER LES ERREURS TYPESCRIPT (Toujours valide)
   typescript: {
     ignoreBuildErrors: true,
   },
