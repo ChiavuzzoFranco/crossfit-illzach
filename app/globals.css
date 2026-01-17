@@ -1,8 +1,18 @@
-@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Le reste de votre CSS... */
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+@media (min-width: 768px) {
+  body, a, button {
+    cursor: none;
+  }
 }
 
 @theme inline {
