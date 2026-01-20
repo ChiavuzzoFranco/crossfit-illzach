@@ -1,5 +1,5 @@
 'use client';
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, Suspense } from "react"; // <--- AJOUT DE SUSPENSE
 import { useSearchParams } from "next/navigation";
 import gsap from "gsap";
 import { CheckCircle } from "lucide-react";
@@ -7,7 +7,8 @@ import { CheckCircle } from "lucide-react";
 // Si tu n'as pas encore créé ce composant, commente la ligne ci-dessous
 import GymMap from "../../components/GymMap"; 
 
-export default function ContactPage() {
+// --- 1. ON CRÉE UN SOUS-COMPOSANT QUI CONTIENT TOUTE LA LOGIQUE ---
+function ContactContent() {
   const containerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   
@@ -19,7 +20,7 @@ export default function ContactPage() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   // CLÉ WEB3FORMS (Mets la tienne ici)
-  const ACCESS_KEY = "f44c73a7-9a33-468e-b470-e71fbf6246ff"; 
+  const ACCESS_KEY = "YOUR_ACCESS_KEY_HERE"; 
 
   // --- ANIMATIONS GSAP ---
   useLayoutEffect(() => {
@@ -64,7 +65,7 @@ export default function ContactPage() {
   }
 
   return (
-    <main ref={containerRef} className="min-h-screen bg-[#050505] text-white pt-32 pb-12 selection:bg-primary selection:text-white">
+    <div ref={containerRef} className="min-h-screen bg-[#050505] text-white pt-32 pb-12 selection:bg-primary selection:text-white">
       
       {/* SECTION 1 : INFOS & FORMULAIRE */}
       <div className="px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 max-w-7xl mx-auto">
@@ -185,12 +186,11 @@ export default function ContactPage() {
          </div>
 
          {/* LE COMPOSANT THREE.JS */}
-         {/* Assure-toi que ce composant existe ou remplace-le par une image si besoin */}
          <div className="w-full h-full bg-[#080808]">
             <GymMap /> 
          </div>
          
-         {/* Overlay esthétique (Lignes de visée caméra) */}
+         {/* Overlay esthétique */}
          <div className="absolute inset-0 pointer-events-none border-[20px] border-transparent md:border-[#050505]">
             <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary"></div>
             <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary"></div>
@@ -198,7 +198,16 @@ export default function ContactPage() {
             <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary"></div>
          </div>
       </div>
+    </div>
+  );
+}
 
-    </main>
+// --- 2. LE COMPOSANT PAR DÉFAUT QUI WRAP LE CONTENU DANS SUSPENSE ---
+export default function ContactPage() {
+  return (
+    // Suspense permet de gérer le chargement des paramètres d'URL sans faire planter le build
+    <Suspense fallback={<div className="min-h-screen bg-[#050505]"></div>}>
+      <ContactContent />
+    </Suspense>
   );
 }
