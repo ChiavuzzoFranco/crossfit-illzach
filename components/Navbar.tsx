@@ -11,11 +11,13 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const links = [
-    { name: 'Home', href: '/' },
-    { name: 'Le Concept', href: '/concept' },
-    { name: 'Planning', href: '/planning' },
-    { name: 'L\'Espace', href: '/wods' },
-    { name: 'Contact', href: '/contact' },
+   { name: 'ACCUEIL', href: '/' },
+  { name: 'LA BOX', href: '/concept' },    // Nouvelle page (Lieu, Coachs, Free Access)
+  { name: 'ACTIVITÉS', href: '/activites' }, // Ancienne page (WOD, Gym, Haltero...)
+  { name: 'PLANNING', href: '/planning' },
+  { name: 'HYROX', href: '/hyrox' },
+  { name: 'TARIFS', href: '/tarifs' },
+  { name: 'CONTACT', href: '/contact' },
   ];
 
   // 1. Initialisation (On place le menu hors de l'écran au chargement)
