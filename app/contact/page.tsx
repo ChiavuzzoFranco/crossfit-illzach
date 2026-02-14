@@ -20,7 +20,7 @@ function ContactContent() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   // CLÉ WEB3FORMS (Mets la tienne ici)
-  const ACCESS_KEY = "YOUR_ACCESS_KEY_HERE"; 
+  const ACCESS_KEY = "f44c73a7-9a33-468e-b470-e71fbf6246ff"; 
 
   // --- ANIMATIONS GSAP ---
   useLayoutEffect(() => {
@@ -87,8 +87,8 @@ function ContactContent() {
             </div>
             <div>
               <h3 className="font-display text-2xl mb-2 text-white">EMAIL</h3>
-              <a href="mailto:contact@crossfitillzach.com" className="font-body text-gray-500 hover:text-primary transition-colors">
-                contact@crossfitillzach.com
+              <a href="mailto:contact@crossfit-illzach.fr" className="font-body text-gray-500 hover:text-primary transition-colors">
+                contact@crossfit-illzach.fr
               </a>
             </div>
             <div>
