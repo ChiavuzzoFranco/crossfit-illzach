@@ -8,18 +8,17 @@ import { Check } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
 // --- COMPOSANT DE DÉCODAGE (SCRAMBLE) ---
-const ScrambleText = ({ 
-  text, 
-  delay = 0, 
+const ScrambleText = ({
+  text,
+  delay = 0,
   className = "",
-  trigger = true 
-}: { 
+  trigger = true
+}: {
   text: string, delay?: number, className?: string, trigger?: boolean
 }) => {
-  const [display, setDisplay] = useState(text); 
+  const [display, setDisplay] = useState(text);
   const [isAnimating, setIsAnimating] = useState(false);
-  
-  // Gestion du délai avant le début de l'effet
+
   useEffect(() => {
     if (!trigger) return;
     const timeoutStart = setTimeout(() => {
@@ -28,32 +27,51 @@ const ScrambleText = ({
     return () => clearTimeout(timeoutStart);
   }, [delay, trigger]);
 
-  // Boucle de l'effet
   useEffect(() => {
     if (!isAnimating) return;
-
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let iteration = 0;
-    
     const interval = setInterval(() => {
-      setDisplay(prev => 
-        text
-          .split("")
-          .map((letter, index) => {
-            if (index < iteration) return text[index];
-            return chars[Math.floor(Math.random() * chars.length)];
-          })
-          .join("")
+      setDisplay(
+        text.split("").map((letter, index) => {
+          if (index < iteration) return text[index];
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join("")
       );
-
       if (iteration >= text.length) clearInterval(interval);
-      iteration += 1 / 3; // Vitesse de décodage
+      iteration += 1 / 3;
     }, 40);
-
     return () => clearInterval(interval);
   }, [isAnimating, text]);
 
   return <span className={className}>{display}</span>;
+};
+
+// --- COMPOSANT PRIX ANIMÉ (Compteur fluide) ---
+const AnimatedPrice = ({ value, delay = 0, className = "" }: { value: number, delay?: number, className?: string }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const currentValue = useRef(0);
+  const hasMounted = useRef(false);
+
+  useEffect(() => {
+    const d = hasMounted.current ? 0 : delay;
+    const from = hasMounted.current ? currentValue.current : 0;
+    hasMounted.current = true;
+
+    const obj = { val: from };
+    gsap.to(obj, {
+      val: value,
+      duration: 0.8,
+      delay: d,
+      ease: "power2.out",
+      onUpdate: () => {
+        if (ref.current) ref.current.textContent = Math.round(obj.val).toString();
+      },
+      onComplete: () => { currentValue.current = value; }
+    });
+  }, [value]);
+
+  return <span ref={ref} className={className}>0</span>;
 };
 
 export default function TarifsPage() {
@@ -231,13 +249,7 @@ export default function TarifsPage() {
                      <div className="flex items-start -ml-2 text-white">
                         <span className="text-2xl font-display mt-2 opacity-50">€</span>
                         <span className={`text-7xl lg:text-8xl leading-[0.8] font-display tracking-tighter ${plan.popular ? 'text-primary' : ''}`}>
-                          {/* "key" force l'effet à se relancer quand on change "isAnnual" */}
-                          <ScrambleText 
-                            key={`${plan.id}-${isAnnual}`}
-                            text={plan.special ? "50" : (isAnnual ? plan.priceAnnual.toString() : plan.priceMonthly.toString())} 
-                            delay={cardDelay + 0.2} 
-                            trigger={isLoaded}
-                          />
+                          <AnimatedPrice value={plan.special ? 50 : (isAnnual ? plan.priceAnnual : plan.priceMonthly)} delay={cardDelay + 0.2} />
                         </span>
                      </div>
                      <p className="text-gray-500 text-xs mt-3 pl-2 font-sans uppercase tracking-widest">
