@@ -80,30 +80,10 @@ export default function Navbar() {
           Illzach
         </TransitionLink>
         
-        {/* MENU DESKTOP (Caché sur mobile) */}
-        <div className="hidden md:flex gap-8">
-          {links.map((link) => (
-            <TransitionLink 
-              key={link.href} 
-              href={link.href}
-              className={clsx(
-                "font-body text-xs uppercase font-bold tracking-widest hover:text-primary transition-colors interactive relative group",
-                pathname === link.href && "text-primary"
-              )}
-            >
-              {link.name}
-              {pathname === link.href && (
-                <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></span>
-              )}
-            </TransitionLink>
-          ))}
-        </div>
-
-        {/* BOUTON HAMBURGER (Visible uniquement sur mobile) */}
-        {/* Z-Index très élevé pour rester cliquable même quand le menu est ouvert */}
-        <button 
-          onClick={() => setIsOpen(!isOpen)} 
-          className="md:hidden border border-white px-4 py-2 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors interactive relative z-[10001]"
+        {/* BOUTON MENU (Visible sur toutes les tailles) */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="border border-white px-4 py-2 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors interactive relative z-[10001]"
         >
           {isOpen ? "Fermer" : "Menu"}
         </button>
@@ -121,7 +101,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href} 
               onClick={() => setIsOpen(false)} 
-              className="mobile-link font-display text-4xl text-white hover:text-primary transition-colors interactive"
+              className="mobile-link font-display text-4xl md:text-6xl text-white hover:text-primary transition-colors interactive"
             >
               {link.name}
             </TransitionLink>

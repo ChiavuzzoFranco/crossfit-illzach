@@ -106,62 +106,62 @@ export default function Home() {
 
       {/* === 2. LA PHILOSOPHIE : SPORT SANTÉ & INCLUSION === */}
       <section className="py-32 px-6 md:px-12 relative z-10 bg-bg">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-          
-          <div className="md:col-span-4 sticky top-32 h-fit">
-            <div className="separator w-full h-[1px] bg-white/30 mb-8"></div>
-            <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.2em] text-primary mb-4">/// Notre Vision</h2>
-            <p className="reveal-on-scroll font-body text-gray-300 text-base leading-relaxed">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-20">
+
+          {/* Colonne gauche — Titre */}
+          <div className="md:col-span-5 md:sticky md:top-32 md:self-start">
+            <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6">/// Notre Vision</h2>
+            <h3 className="reveal-on-scroll font-display text-5xl md:text-7xl leading-[0.9] mb-6">
+              VENEZ COMME<br/>
+              <span className="text-primary">VOUS ÊTES.</span>
+            </h3>
+            <p className="reveal-on-scroll font-body text-gray-500 text-base leading-relaxed max-w-sm">
               Oubliez les clichés du militaire qui hurle. Ici, la star, c'est votre santé. Nous utilisons le CrossFit pour vous rendre plus fort pour la vie de tous les jours.
             </p>
+            <div className="mt-10 reveal-on-scroll">
+              <TransitionLink href="/concept" className="inline-block border border-white/20 px-8 py-4 font-display text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+                Découvrir notre méthode →
+              </TransitionLink>
+            </div>
           </div>
 
-          <div className="md:col-span-8">
-             <div className="separator w-full h-[1px] bg-white/30 mb-12"></div>
-             
-             {/* Gros Titre Rassurant */}
-             <div className="mb-16">
-                <h3 className="reveal-on-scroll font-display text-5xl md:text-7xl leading-[0.9] mb-4">
-                  VENEZ COMME<br/>
-                  <span className="text-primary">VOUS ÊTES.</span>
-                </h3>
-             </div>
+          {/* Colonne droite — Les 3 Piliers */}
+          <div className="md:col-span-7 flex flex-col gap-0">
 
-             {/* Les 3 Piliers de l'Accessibilité */}
-             <div className="grid grid-cols-1 gap-12">
-                
-                {/* 1. Coaching */}
-                <div className="reveal-on-scroll group border-l-2 border-white/10 pl-8 hover:border-primary transition-colors duration-500">
-                  <h4 className="font-display text-3xl mb-2 text-white">COACHING SEMI-PRIVÉ</h4>
-                  <p className="font-body text-gray-400 text-sm max-w-md">
-                    Nos cours sont limités à 12 personnes. Pourquoi ? Pour que le coach puisse passer du temps avec <strong>chacun de vous</strong>. On corrige votre posture, on adapte la charge. C'est la qualité du coaching privé, avec l'énergie du groupe.
-                  </p>
-                </div>
+            {/* 1. Coaching */}
+            <div className="reveal-on-scroll group py-10 border-t border-white/10">
+              <div className="flex items-baseline gap-4 mb-3">
+                <span className="font-body text-xs text-primary/60">01</span>
+                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">COACHING SEMI-PRIVÉ</h4>
+              </div>
+              <p className="font-body text-gray-500 text-sm leading-relaxed md:pl-10">
+                Nos cours sont limités à 12 personnes. Pourquoi ? Pour que le coach puisse passer du temps avec <strong className="text-gray-300">chacun de vous</strong>. On corrige votre posture, on adapte la charge. C'est la qualité du coaching privé, avec l'énergie du groupe.
+              </p>
+            </div>
 
-                {/* 2. Adaptabilité */}
-                <div className="reveal-on-scroll group border-l-2 border-white/10 pl-8 hover:border-primary transition-colors duration-500">
-                  <h4 className="font-display text-3xl mb-2 text-white">100% ADAPTABLE</h4>
-                  <p className="font-body text-gray-400 text-sm max-w-md">
-                    Vous ne savez pas faire de traction ? Pas de problème. Vous avez mal au dos ? On a une solution. <br/>
-                    Dans le même cours, un athlète peut soulever 100kg et sa grand-mère soulever un tube en PVC. <strong>L'effort est le même, la charge est adaptée.</strong>
-                  </p>
-                </div>
+            {/* 2. Adaptabilité */}
+            <div className="reveal-on-scroll group py-10 border-t border-white/10">
+              <div className="flex items-baseline gap-4 mb-3">
+                <span className="font-body text-xs text-primary/60">02</span>
+                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">100% ADAPTABLE</h4>
+              </div>
+              <p className="font-body text-gray-500 text-sm leading-relaxed md:pl-10">
+                Vous ne savez pas faire de traction ? Pas de problème. Vous avez mal au dos ? On a une solution.
+                Dans le même cours, un athlète peut soulever 100kg et sa grand-mère soulever un tube en PVC. <strong className="text-gray-300">L'effort est le même, la charge est adaptée.</strong>
+              </p>
+            </div>
 
-                {/* 3. Communauté */}
-                <div className="reveal-on-scroll group border-l-2 border-white/10 pl-8 hover:border-primary transition-colors duration-500">
-                  <h4 className="font-display text-3xl mb-2 text-white">ZERO JUGEMENT</h4>
-                  <p className="font-body text-gray-400 text-sm max-w-md">
-                    Le dernier à finir est celui qu'on applaudit le plus fort. Personne ne se regarde dans le miroir ici. On transpire ensemble, on rigole ensemble, on progresse ensemble.
-                  </p>
-                </div>
+            {/* 3. Communauté */}
+            <div className="reveal-on-scroll group py-10 border-t border-white/10 border-b">
+              <div className="flex items-baseline gap-4 mb-3">
+                <span className="font-body text-xs text-primary/60">03</span>
+                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">ZERO JUGEMENT</h4>
+              </div>
+              <p className="font-body text-gray-500 text-sm leading-relaxed md:pl-10">
+                Le dernier à finir est celui qu'on applaudit le plus fort. Personne ne se regarde dans le miroir ici. On transpire ensemble, on rigole ensemble, on progresse ensemble.
+              </p>
+            </div>
 
-             </div>
-             
-             <div className="mt-16 reveal-on-scroll">
-               <TransitionLink href="/concept" className="inline-block border border-white px-8 py-4 font-display text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-                 Découvrir notre méthode →
-               </TransitionLink>
-             </div>
           </div>
 
         </div>

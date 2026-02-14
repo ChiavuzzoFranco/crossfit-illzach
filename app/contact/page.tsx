@@ -182,7 +182,7 @@ function ContactContent() {
          {/* Titre superposé */}
          <div className="absolute top-6 left-6 md:left-12 z-10 pointer-events-none mix-blend-difference">
             <h2 className="font-display text-4xl md:text-6xl text-white uppercase">La Zone</h2>
-            <p className="font-body text-primary text-sm tracking-widest uppercase">Illzach — Industry Sector</p>
+            <p className="font-body text-primary text-sm tracking-widest uppercase">Z.I ILE NAPOLÉON</p>
          </div>
 
          {/* LE COMPOSANT THREE.JS */}

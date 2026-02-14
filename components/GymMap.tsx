@@ -33,6 +33,8 @@ export default function GymMap() {
       style: `https://api.maptiler.com/maps/dataviz-dark/style.json?key=${MAPTILER_KEY}`,
       center: START_COORDS, // On commence en vue éloignée
       zoom: START_ZOOM,
+      minZoom: 13,
+      maxZoom: 18.5,
       pitch: 0,             // Vue à plat (2D)
       bearing: 0,
       attributionControl: false,
