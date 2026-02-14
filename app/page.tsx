@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Link from "next/link";
 import TransitionLink from "../components/TransitionLink";
 
 export default function Home() {
@@ -13,8 +12,8 @@ export default function Home() {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    
-    // Parallaxe Gorille (Gardons le gorille, c'est l'emblème, mais rendons le sympa)
+
+    // Parallaxe Gorille
     gsap.to(gorillaRef.current, {
       yPercent: 20,
       ease: "none",
@@ -41,7 +40,7 @@ export default function Home() {
     // Apparition des textes "Reveal"
     const reveals = document.querySelectorAll(".reveal-on-scroll");
     reveals.forEach((text) => {
-      gsap.fromTo(text, 
+      gsap.fromTo(text,
         { y: 50, opacity: 0 },
         {
           y: 0,
@@ -70,11 +69,11 @@ export default function Home() {
 
   return (
     <main ref={containerRef} className="min-h-screen bg-bg relative overflow-hidden text-white">
-      
-      {/* === 1. HERO SECTION : INSPIRANT & ACCESSIBLE === */}
+
+      {/* === 1. HERO SECTION === */}
       <section className="h-screen w-full relative flex flex-col items-center justify-center border-b border-white/10">
-        
-        {/* Texte Arrière-plan (Esthétique) */}
+
+        {/* Texte Arrière-plan */}
         <div ref={bgTextRef} className="absolute inset-0 flex flex-col items-center justify-center z-0 select-none opacity-20">
           <h1 className="text-[18vw] leading-[0.8] font-display text-gray-700 text-center whitespace-nowrap">
             ILLZACH
@@ -83,44 +82,44 @@ export default function Home() {
 
         {/* Gorille */}
         <div ref={gorillaRef} className="relative z-10 w-[80vw] md:w-[500px] pointer-events-none">
-           <Image 
-             src="/logo.png" 
-             alt="Crossfit Illzach Logo" 
-             width={600} 
+           <Image
+             src="/logo.png"
+             alt="Crossfit Illzach Logo"
+             width={600}
              height={600}
              priority
              className="w-full h-auto object-contain drop-shadow-2xl"
            />
         </div>
 
-        {/* Nouveau Slogan : Sport Santé */}
+        {/* Slogan Hero */}
         <div className="absolute bottom-24 z-20 text-center px-4">
-           <h2 className="font-display text-4xl md:text-6xl mb-4 text-white">
-             LE SPORT. <span className="text-primary">ENFIN POUR VOUS.</span>
+           <h2 className="font-display text-3xl md:text-6xl mb-4 text-white leading-tight">
+             PLUS QU&apos;UNE SALLE.<br/><span className="text-primary">UNE COMMUNAUTÉ.</span>
            </h2>
            <p className="font-body text-gray-400 max-w-lg mx-auto text-sm md:text-base">
-             Bouger mieux. Vivre plus longtemps. Rejoignez une communauté bienveillante, quel que soit votre niveau.
+             Votre niveau sportif importe peu. Ce qui compte, c&apos;est vous. Rejoignez une communauté bienveillante où chacun progresse à son rythme.
            </p>
         </div>
       </section>
 
-      {/* === 2. LA PHILOSOPHIE : SPORT SANTÉ & INCLUSION === */}
+      {/* === 2. NOTRE PHILOSOPHIE (CARE) === */}
       <section className="py-32 px-6 md:px-12 relative z-10 bg-bg">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-20">
 
           {/* Colonne gauche — Titre */}
           <div className="md:col-span-5 md:sticky md:top-32 md:self-start">
-            <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6">/// Notre Vision</h2>
+            <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6">/// Notre Philosophie</h2>
             <h3 className="reveal-on-scroll font-display text-5xl md:text-7xl leading-[0.9] mb-6">
-              VENEZ COMME<br/>
-              <span className="text-primary">VOUS ÊTES.</span>
+              VOTRE SANTÉ<br/>
+              <span className="text-primary">AVANT TOUT.</span>
             </h3>
             <p className="reveal-on-scroll font-body text-gray-500 text-base leading-relaxed max-w-sm">
-              Oubliez les clichés du militaire qui hurle. Ici, la star, c'est votre santé. Nous utilisons le CrossFit pour vous rendre plus fort pour la vie de tous les jours.
+              Chez nous, le CrossFit n&apos;est pas une compétition contre les autres. C&apos;est un moyen de se sentir mieux dans sa vie, encadré par des coachs qui se soucient vraiment de votre réussite.
             </p>
             <div className="mt-10 reveal-on-scroll">
               <TransitionLink href="/concept" className="inline-block border border-white/20 px-8 py-4 font-display text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-                Découvrir notre méthode →
+                Découvrir la box →
               </TransitionLink>
             </div>
           </div>
@@ -128,37 +127,36 @@ export default function Home() {
           {/* Colonne droite — Les 3 Piliers */}
           <div className="md:col-span-7 flex flex-col gap-0">
 
-            {/* 1. Coaching */}
+            {/* 1. Sécurité & Adaptation */}
             <div className="reveal-on-scroll group py-10 border-t border-white/10">
               <div className="flex items-baseline gap-4 mb-3">
                 <span className="font-body text-xs text-primary/60">01</span>
-                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">COACHING SEMI-PRIVÉ</h4>
+                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">SÉCURITÉ & ADAPTATION</h4>
               </div>
               <p className="font-body text-gray-500 text-sm leading-relaxed md:pl-10">
-                Nos cours sont limités à 12 personnes. Pourquoi ? Pour que le coach puisse passer du temps avec <strong className="text-gray-300">chacun de vous</strong>. On corrige votre posture, on adapte la charge. C'est la qualité du coaching privé, avec l'énergie du groupe.
+                Nos coachs veillent sur chaque mouvement. Une douleur ? Une reprise difficile ? Nous adaptons <strong className="text-gray-300">chaque exercice</strong> pour protéger votre corps tout en vous faisant progresser.
               </p>
             </div>
 
-            {/* 2. Adaptabilité */}
+            {/* 2. Zéro Jugement */}
             <div className="reveal-on-scroll group py-10 border-t border-white/10">
               <div className="flex items-baseline gap-4 mb-3">
                 <span className="font-body text-xs text-primary/60">02</span>
-                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">100% ADAPTABLE</h4>
+                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">ZÉRO JUGEMENT</h4>
               </div>
               <p className="font-body text-gray-500 text-sm leading-relaxed md:pl-10">
-                Vous ne savez pas faire de traction ? Pas de problème. Vous avez mal au dos ? On a une solution.
-                Dans le même cours, un athlète peut soulever 100kg et sa grand-mère soulever un tube en PVC. <strong className="text-gray-300">L'effort est le même, la charge est adaptée.</strong>
+                Que vous soyez un athlète confirmé ou que vous n&apos;ayez pas fait de sport depuis 10 ans, <strong className="text-gray-300">vous avez votre place ici</strong>. Personne ne vous regarde de haut.
               </p>
             </div>
 
-            {/* 3. Communauté */}
+            {/* 3. L'Humain au Centre */}
             <div className="reveal-on-scroll group py-10 border-t border-white/10 border-b">
               <div className="flex items-baseline gap-4 mb-3">
                 <span className="font-body text-xs text-primary/60">03</span>
-                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">ZERO JUGEMENT</h4>
+                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">L&apos;HUMAIN AU CENTRE</h4>
               </div>
               <p className="font-body text-gray-500 text-sm leading-relaxed md:pl-10">
-                Le dernier à finir est celui qu'on applaudit le plus fort. Personne ne se regarde dans le miroir ici. On transpire ensemble, on rigole ensemble, on progresse ensemble.
+                Nous connaissons chacun de nos adhérents par leur prénom. Vos objectifs deviennent les nôtres, qu&apos;il s&apos;agisse de perdre du poids, de se muscler ou simplement de <strong className="text-gray-300">se vider la tête</strong>.
               </p>
             </div>
 
@@ -167,18 +165,114 @@ export default function Home() {
         </div>
       </section>
 
-      {/* === 3. IMAGE & CTA === */}
-      <section className="w-full relative py-32 bg-[#080808] border-t border-white/10">
-        <div className="px-6 md:px-12 text-center">
-            <h3 className="reveal-on-scroll font-display text-4xl md:text-6xl mb-8">
-              LE PLUS DUR,<br/>C'EST DE PASSER LA PORTE.
-            </h3>
-            <p className="reveal-on-scroll font-body text-gray-400 mb-12 max-w-xl mx-auto">
-              Nous savons que commencer est intimidant. Venez juste nous rencontrer, boire un café, et voir comment ça se passe. La première séance est offerte.
+      {/* === 3. L'ESPRIT DE LA BOX (COMMUNAUTÉ) === */}
+      <section className="py-32 px-6 md:px-12 bg-[#080808] border-y border-white/10">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6">/// L&apos;Esprit de la Box</h2>
+          <h3 className="reveal-on-scroll font-display text-4xl md:text-7xl leading-[0.9] mb-12">
+            ON VIENT POUR LE SPORT.<br/>
+            <span className="text-primary">ON RESTE POUR LES AMIS.</span>
+          </h3>
+
+          {/* Citation */}
+          <blockquote className="reveal-on-scroll border-l-2 border-primary pl-6 md:pl-8 text-left max-w-2xl mx-auto mb-12">
+            <p className="font-body text-lg md:text-xl text-gray-300 italic leading-relaxed">
+              &ldquo;Ici, celui qui termine son entraînement en dernier est celui qui reçoit le plus d&apos;encouragements.&rdquo;
             </p>
-            <TransitionLink href="/contact" className="reveal-on-scroll inline-block bg-primary text-white font-display text-xl px-12 py-5 uppercase tracking-wider hover:bg-white hover:text-black transition-colors">
-              Réserver ma séance d'essai
+          </blockquote>
+
+          <p className="reveal-on-scroll font-body text-gray-500 text-base leading-relaxed max-w-2xl mx-auto">
+            À CrossFit Illzach, l&apos;entraide est notre moteur. L&apos;entraînement est intense, mais les sourires à la fin sont garantis. Et après l&apos;effort ? Place au réconfort dans notre espace détente. On partage un café, on discute, on rit. <strong className="text-gray-300">C&apos;est ça, la vraie force de notre communauté.</strong>
+          </p>
+        </div>
+      </section>
+
+      {/* === 4. NOS SERVICES === */}
+      <section className="py-32 px-6 md:px-12 bg-bg">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6 text-center">/// Nos Services</h2>
+          <h3 className="reveal-on-scroll font-display text-4xl md:text-7xl leading-[0.9] mb-20 text-center">
+            UN ACCOMPAGNEMENT<br/><span className="text-primary">COMPLET POUR TOUS</span>
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            {/* Carte WOD */}
+            <div className="reveal-on-scroll group border border-white/10 p-8 md:p-10 hover:border-primary/50 transition-colors duration-500 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
+              <span className="font-body text-xs text-primary/60 block mb-4">01</span>
+              <h4 className="font-display text-2xl mb-4 text-white group-hover:text-primary transition-colors">LE WOD</h4>
+              <p className="font-body text-gray-500 text-sm leading-relaxed">
+                Des séances d&apos;une heure en petit groupe, encadrées de A à Z par un coach. On s&apos;échauffe ensemble, on travaille la technique, et on se dépense dans la bonne humeur.
+              </p>
+            </div>
+
+            {/* Carte Gym & Haltéro */}
+            <div className="reveal-on-scroll group border border-white/10 p-8 md:p-10 hover:border-primary/50 transition-colors duration-500 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
+              <span className="font-body text-xs text-primary/60 block mb-4">02</span>
+              <h4 className="font-display text-2xl mb-4 text-white group-hover:text-primary transition-colors">GYM & HALTÉROPHILIE</h4>
+              <p className="font-body text-gray-500 text-sm leading-relaxed">
+                Des créneaux spécifiques pour apprendre à maîtriser votre corps et les charges, en douceur et avec pédagogie. Idéal pour gagner en confiance technique.
+              </p>
+            </div>
+
+            {/* Carte Coaching */}
+            <div className="reveal-on-scroll group border border-white/10 p-8 md:p-10 hover:border-primary/50 transition-colors duration-500 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
+              <span className="font-body text-xs text-primary/60 block mb-4">03</span>
+              <h4 className="font-display text-2xl mb-4 text-white group-hover:text-primary transition-colors">COACHING PERSONNALISÉ</h4>
+              <p className="font-body text-gray-500 text-sm leading-relaxed">
+                Besoin d&apos;un suivi sur-mesure pour un objectif précis ? Nos coachs sont là pour vous créer un programme adapté à 100% à vos besoins.
+              </p>
+            </div>
+
+          </div>
+
+          <div className="reveal-on-scroll text-center mt-12">
+            <TransitionLink href="/activites" className="inline-block border border-white/20 px-8 py-4 font-display text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+              Voir toutes les activités →
             </TransitionLink>
+          </div>
+        </div>
+      </section>
+
+      {/* === 5. L'ÉQUIPE === */}
+      <section className="py-32 px-6 md:px-12 bg-[#080808] border-y border-white/10">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6">/// L&apos;Équipe</h2>
+          <h3 className="reveal-on-scroll font-display text-4xl md:text-7xl leading-[0.9] mb-10">
+            UNE ÉQUIPE PASSIONNÉE<br/><span className="text-primary">À VOS CÔTÉS</span>
+          </h3>
+          <p className="reveal-on-scroll font-body text-gray-500 text-base leading-relaxed max-w-2xl mx-auto mb-8">
+            Nous ne sommes pas là juste pour compter les répétitions. Nous sommes là pour vous écouter, vous motiver quand c&apos;est dur, et célébrer vos victoires avec vous. Notre porte est toujours ouverte pour discuter de vos progrès ou de vos petits bobos.
+          </p>
+          <div className="reveal-on-scroll">
+            <TransitionLink href="/concept" className="inline-block border border-white/20 px-8 py-4 font-display text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+              Rencontrer l&apos;équipe →
+            </TransitionLink>
+          </div>
+        </div>
+      </section>
+
+      {/* === 6. CTA FINAL === */}
+      <section className="py-32 px-6 md:px-12 bg-bg">
+        <div className="max-w-4xl mx-auto text-center">
+          <h3 className="reveal-on-scroll font-display text-4xl md:text-6xl mb-6">
+            PRÊT À REJOINDRE<br/><span className="text-primary">LA FAMILLE ?</span>
+          </h3>
+          <p className="reveal-on-scroll font-body text-gray-400 mb-6 max-w-xl mx-auto">
+            Ne restez pas seul(e) face à vos objectifs. Venez nous rencontrer, visiter la salle et boire un café avec nous.
+          </p>
+
+          <div className="reveal-on-scroll flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
+            <TransitionLink href="/planning" className="inline-block bg-primary text-white font-display text-xl px-12 py-5 uppercase tracking-wider hover:bg-white hover:text-black transition-colors text-center">
+              Réserver ma séance d&apos;essai
+            </TransitionLink>
+            <TransitionLink href="/contact" className="inline-block border border-white/20 text-white font-display text-xl px-12 py-5 uppercase tracking-wider hover:bg-white hover:text-black transition-all text-center">
+              Nous contacter
+            </TransitionLink>
+          </div>
         </div>
       </section>
 

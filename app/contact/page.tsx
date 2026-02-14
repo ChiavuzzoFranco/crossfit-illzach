@@ -12,8 +12,9 @@ function ContactContent() {
   const containerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   
-  // Récupération du plan sélectionné dans l'URL (ex: ?plan=ILLIMITE)
+  // Récupération des paramètres d'URL
   const selectedPlan = searchParams.get('plan');
+  const selectedCreneau = searchParams.get('creneau');
 
   // États du formulaire
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -123,10 +124,21 @@ function ContactContent() {
                 
                 {/* Inputs cachés Web3Forms */}
                 <input type="hidden" name="access_key" value={ACCESS_KEY} />
-                {selectedPlan && <input type="hidden" name="subject" value={`Demande Abonnement : ${selectedPlan}`} />}
+                {selectedCreneau
+                  ? <input type="hidden" name="subject" value={`Séance d'essai : ${selectedCreneau}`} />
+                  : selectedPlan && <input type="hidden" name="subject" value={`Demande Abonnement : ${selectedPlan}`} />
+                }
 
-                {/* BANDEAU SI ABONNEMENT SÉLECTIONNÉ */}
-                {selectedPlan && (
+                {/* BANDEAU SI CRÉNEAU SÉLECTIONNÉ */}
+                {selectedCreneau && (
+                   <div className="pb-4 border-b border-white/10 mb-6 flex justify-between items-end">
+                      <span className="font-display text-gray-500 text-sm tracking-widest">CRÉNEAU</span>
+                      <span className="font-display text-primary text-xl uppercase">{selectedCreneau}</span>
+                   </div>
+                )}
+
+                {/* BANDEAU SI ABONNEMENT SÉLECTIONNÉ (uniquement si pas de créneau) */}
+                {!selectedCreneau && selectedPlan && (
                    <div className="pb-4 border-b border-white/10 mb-6 flex justify-between items-end">
                       <span className="font-display text-gray-500 text-sm tracking-widest">SUJET</span>
                       <span className="font-display text-primary text-xl uppercase">{selectedPlan}</span>
@@ -161,7 +173,10 @@ function ContactContent() {
                     name="message" 
                     rows={4} 
                     className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors resize-none w-full"
-                    defaultValue={selectedPlan ? `Bonjour, je suis intéressé par l'offre ${selectedPlan}.` : ""}
+                    defaultValue={selectedCreneau
+                      ? `Bonjour, je souhaite réserver une séance d'essai sur le créneau suivant : ${selectedCreneau}.`
+                      : selectedPlan ? `Bonjour, je suis intéressé par l'offre ${selectedPlan}.` : ""
+                    }
                   ></textarea>
                 </div>
                 
