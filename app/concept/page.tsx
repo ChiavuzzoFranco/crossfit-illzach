@@ -161,8 +161,8 @@ export default function ConceptPage() {
       </section>
 
 
-      {/* --- SECTION 3: LE STAFF (COACHS) --- */}
-      <section className="py-32 px-6 md:px-12 bg-[#080808] border-t border-white/5">
+      {/* --- SECTION 3: LE STAFF (COACHS) --- MASQUÉE EN ATTENDANT LES VRAIES PHOTOS */}
+      <section className="py-32 px-6 md:px-12 bg-[#080808] border-t border-white/5" style={{ display: 'none' }}>
         <div className="max-w-7xl mx-auto">
           <div className="mb-20 text-center">
             <h2 className="font-display text-5xl md:text-7xl mb-4">LE STAFF</h2>

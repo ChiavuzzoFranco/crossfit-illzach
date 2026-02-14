@@ -12,6 +12,7 @@ export default function GymMap() {
   // États pour gérer le chargement et l'animation
   const [isMapReady, setIsMapReady] = useState(false);
   const [hasFlown, setHasFlown] = useState(false); // Pour ne lancer l'anim qu'une fois
+  const [isFlying, setIsFlying] = useState(false); // Pour bloquer les interactions pendant le vol
 
   // DESTINATION (La Box)
   const GYM_COORDS: [number, number] = [7.3825381, 47.7665399]; 
@@ -129,8 +130,19 @@ export default function GymMap() {
         // Si l'élément est visible à l'écran
         if (entry.isIntersecting) {
           
+          // Désactiver les interactions pendant l'animation
+          const m = map.current!;
+          m.scrollZoom.disable();
+          m.boxZoom.disable();
+          m.dragRotate.disable();
+          m.dragPan.disable();
+          m.keyboard.disable();
+          m.doubleClickZoom.disable();
+          m.touchZoomRotate.disable();
+          setIsFlying(true);
+
           // LANCE L'ANIMATION
-          map.current?.flyTo({
+          m.flyTo({
             center: GYM_COORDS,
             zoom: 17.5,
             pitch: 60,
@@ -138,6 +150,18 @@ export default function GymMap() {
             speed: 0.5, // Lent et fluide
             curve: 1.2,
             essential: true
+          });
+
+          // Réactiver les interactions une fois l'animation terminée
+          m.once('moveend', () => {
+            m.scrollZoom.enable();
+            m.boxZoom.enable();
+            m.dragRotate.enable();
+            m.dragPan.enable();
+            m.keyboard.enable();
+            m.doubleClickZoom.enable();
+            m.touchZoomRotate.enable();
+            setIsFlying(false);
           });
 
           // On marque comme fait (pour ne pas recommencer)
@@ -159,7 +183,7 @@ export default function GymMap() {
 
   return (
     <div className="w-full h-full relative group">
-      <div ref={mapContainer} className="w-full h-full bg-[#050505]" />
+      <div ref={mapContainer} className="w-full h-full bg-[#050505]" style={isFlying ? { pointerEvents: 'none' } : undefined} />
       
       <div className="absolute bottom-6 right-6 flex flex-col gap-2 z-10">
         <button onClick={handleZoomIn} className="w-10 h-10 bg-black border border-white/20 text-white hover:text-[#FF3300] hover:border-[#FF3300] transition-colors flex items-center justify-center font-display text-xl cursor-pointer">+</button>

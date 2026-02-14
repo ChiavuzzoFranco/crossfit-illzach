@@ -99,6 +99,23 @@ const CLASSES = [
     ]
   },
   {
+    id: "hiit",
+    title: "HIIT",
+    subtitle: "High Intensity Interval Training",
+    desc: "Brûlez un max en un minimum de temps.",
+    longDescription: "Des intervalles courts à haute intensité suivis de phases de récupération. Le HIIT est le format le plus efficace pour brûler des calories, améliorer votre capacité cardiovasculaire et booster votre métabolisme. Accessible à tous niveaux, chaque exercice est adaptable.",
+    focus: "Cardio & Brûlage",
+    structure: "Warm up • Circuits (30s effort / 15s repos) • 3-5 rounds • Stretching",
+    tags: ["Cardio", "Brûlage"],
+    cover: "https://images.unsplash.com/photo-1434608519344-49d77a699e1d?q=80&w=1200",
+    images: [
+      "https://images.unsplash.com/photo-1517963879466-e1b54ebd5914?q=80&w=800",
+      "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=800",
+      "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800",
+      "https://images.unsplash.com/photo-1550345332-09e3ac987658?q=80&w=800"
+    ]
+  },
+  {
     id: "hyrox",
     title: "HYROX",
     subtitle: "Endurance",
