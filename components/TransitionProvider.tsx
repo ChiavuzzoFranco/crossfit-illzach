@@ -71,13 +71,13 @@ export default function TransitionProvider({ children }: { children: React.React
   return (
     <TransitionContext.Provider value={{ animatePageOut }}>
       <div className="fixed inset-0 z-[99999] flex pointer-events-none h-screen w-screen top-0 left-0">
-        <div ref={col1Ref} style={{ transform: 'translateY(100%)' }} className="w-1/3 h-full bg-red-600 border-r border-white/10 relative">
+        <div ref={col1Ref} style={{ translate: '0 100%' }} className="w-1/3 h-full bg-red-600 border-r border-white/10 relative">
            <div className="absolute bottom-10 left-10 text-white font-display text-4xl hidden md:block">01</div>
         </div>
-        <div ref={col2Ref} style={{ transform: 'translateY(100%)' }} className="w-1/3 h-full bg-red-600 border-r border-white/10 relative">
+        <div ref={col2Ref} style={{ translate: '0 100%' }} className="w-1/3 h-full bg-red-600 border-r border-white/10 relative">
            <div className="absolute bottom-10 left-10 text-white font-display text-4xl hidden md:block">02</div>
         </div>
-        <div ref={col3Ref} style={{ transform: 'translateY(100%)' }} className="w-1/3 h-full bg-red-600 relative">
+        <div ref={col3Ref} style={{ translate: '0 100%' }} className="w-1/3 h-full bg-red-600 relative">
            <div className="absolute bottom-10 left-10 text-white font-display text-4xl hidden md:block">03</div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
+import gsap from 'gsap';
 import TransitionLink from './TransitionLink';
 
 export default function Navbar() {
@@ -19,27 +19,26 @@ export default function Navbar() {
   { name: 'CONTACT', href: '/contact' },
   ];
 
-  // Init: place menu off-screen via CSS (inline style), no GSAP needed
+  // Init: place menu off-screen
+  useLayoutEffect(() => {
+    gsap.set(menuRef.current, { yPercent: -100 });
+  }, []);
 
   // Animation open/close
   useEffect(() => {
-    (async () => {
-      const { default: gsap } = await import('gsap');
-
-      if (isOpen) {
-        const tl = gsap.timeline();
-        tl.to(menuRef.current, { yPercent: 0, duration: 0.8, ease: "power4.inOut" })
-          .fromTo(".mobile-link",
-            { y: 50, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" },
-            "-=0.4"
-          );
-        document.body.style.overflow = 'hidden';
-      } else {
-        gsap.to(menuRef.current, { yPercent: -100, duration: 0.8, ease: "power4.inOut" });
-        document.body.style.overflow = '';
-      }
-    })();
+    if (isOpen) {
+      const tl = gsap.timeline();
+      tl.to(menuRef.current, { yPercent: 0, duration: 0.8, ease: "power4.inOut" })
+        .fromTo(".mobile-link",
+          { y: 50, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" },
+          "-=0.4"
+        );
+      document.body.style.overflow = 'hidden';
+    } else {
+      gsap.to(menuRef.current, { yPercent: -100, duration: 0.8, ease: "power4.inOut" });
+      document.body.style.overflow = '';
+    }
   }, [isOpen]);
 
   // Close on route change
@@ -62,7 +61,7 @@ export default function Navbar() {
       <div
         ref={menuRef}
         className="fixed inset-0 w-screen h-screen bg-[#0a0a0a] z-[9995] flex flex-col items-center justify-center"
-        style={{ transform: 'translateY(-100%)', willChange: 'transform' }}
+        style={{ willChange: 'transform' }}
       >
         <div className="flex flex-col gap-8 text-center">
           {links.map((link) => (
