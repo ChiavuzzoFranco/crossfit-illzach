@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Lock, Dumbbell } from "lucide-react";
 import TransitionLink from "../../components/TransitionLink";
 import dynamic from "next/dynamic";
@@ -8,6 +8,28 @@ const AccessBadge3D = dynamic(() => import("@/components/AccessBadge3D"), {
   ssr: false,
   loading: () => <div className="w-full h-[500px] md:h-[600px]" />,
 });
+
+// Charge AccessBadge3D seulement quand la section est visible
+function LazyBadge() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+      { rootMargin: "300px" }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="w-full h-[500px] md:h-[600px]">
+      {visible && <AccessBadge3D />}
+    </div>
+  );
+}
 
 // --- DONNÉES DU PLANNING (facile à modifier) ---
 const SCHEDULE: Record<string, { time: string; type: string }[]> = {
@@ -176,7 +198,7 @@ export default function PlanningPage() {
 
           {/* Badge 3D */}
           <div className="w-full md:w-1/2 shrink-0">
-            <AccessBadge3D />
+            <LazyBadge />
           </div>
 
           {/* Texte */}
