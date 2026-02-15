@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
 import { Lock, Dumbbell } from "lucide-react";
 import TransitionLink from "../../components/TransitionLink";
 import dynamic from "next/dynamic";
@@ -60,17 +59,20 @@ export default function PlanningPage() {
   const badgeSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    gsap.fromTo(".planning-row",
-      { x: -50, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power2.out", delay: 0.5 }
-    );
-
-    if (badgeSectionRef.current) {
-      gsap.fromTo(badgeSectionRef.current,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: "power2.out", delay: 1 }
+    (async () => {
+      const { default: gsap } = await import("gsap");
+      gsap.fromTo(".planning-row",
+        { x: -50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power2.out", delay: 0.5 }
       );
-    }
+
+      if (badgeSectionRef.current) {
+        gsap.fromTo(badgeSectionRef.current,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, ease: "power2.out", delay: 1 }
+        );
+      }
+    })();
   }, []);
 
   return (

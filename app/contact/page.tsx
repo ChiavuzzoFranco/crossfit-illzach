@@ -1,11 +1,13 @@
 'use client';
-import { useLayoutEffect, useRef, useState, Suspense } from "react"; // <--- AJOUT DE SUSPENSE
+import { useEffect, useLayoutEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import gsap from "gsap";
+import dynamic from "next/dynamic";
 import { CheckCircle } from "lucide-react";
 
-// Si tu n'as pas encore créé ce composant, commente la ligne ci-dessous
-import GymMap from "../../components/GymMap"; 
+const GymMap = dynamic(() => import("../../components/GymMap"), {
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-[#050505]" />,
+});
 
 // --- 1. ON CRÉE UN SOUS-COMPOSANT QUI CONTIENT TOUTE LA LOGIQUE ---
 function ContactContent() {
@@ -23,23 +25,27 @@ function ContactContent() {
   // CLÉ WEB3FORMS (Mets la tienne ici)
   const ACCESS_KEY = "f44c73a7-9a33-468e-b470-e71fbf6246ff"; 
 
-  // --- ANIMATIONS GSAP ---
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
-      
-      tl.fromTo(".contact-reveal", 
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out", delay: 0.2 }
-      );
-      
-      tl.fromTo(".map-reveal",
-        { scale: 0.95, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.2, ease: "expo.out" },
-        "-=0.5"
-      );
-    }, containerRef);
-    return () => ctx.revert();
+  // --- ANIMATIONS GSAP (lazy loaded) ---
+  useEffect(() => {
+    let ctx: any;
+    (async () => {
+      const { default: gsap } = await import("gsap");
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline();
+
+        tl.fromTo(".contact-reveal",
+          { y: 50, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out", delay: 0.2 }
+        );
+
+        tl.fromTo(".map-reveal",
+          { scale: 0.95, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 1.2, ease: "expo.out" },
+          "-=0.5"
+        );
+      }, containerRef);
+    })();
+    return () => { if (ctx) ctx.revert(); };
   }, []);
 
   // --- LOGIQUE D'ENVOI ---
@@ -95,8 +101,8 @@ function ContactContent() {
             <div>
                <h3 className="font-display text-2xl mb-2 text-white">SOCIAL</h3>
                <div className="flex gap-4 font-body text-sm uppercase text-gray-400">
-                 <a href="#" className="hover:text-primary transition-colors">Instagram</a>
-                 <a href="#" className="hover:text-primary transition-colors">Facebook</a>
+                 <a href="https://www.instagram.com/crossfitillzach/?hl=fr" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Instagram</a>
+                 <a href="https://www.facebook.com/CrossFitIllzach/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Facebook</a>
                </div>
             </div>
           </div>

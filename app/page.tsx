@@ -1,8 +1,6 @@
 'use client';
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TransitionLink from "../components/TransitionLink";
 
 export default function Home() {
@@ -11,9 +9,14 @@ export default function Home() {
   const bgTextRef = useRef(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    let ctx: any;
+    (async () => {
+      const { default: gsapCore } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsapCore.registerPlugin(ScrollTrigger);
+      const gsap = gsapCore;
 
-    const ctx = gsap.context(() => {
+    const gsapCtx = gsap.context(() => {
 
       // ——— HERO ENTRANCE TIMELINE ———
       const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -189,8 +192,10 @@ export default function Home() {
       );
 
     }, containerRef);
+    ctx = gsapCtx;
+    })();
 
-    return () => ctx.revert();
+    return () => { if (ctx) ctx.revert(); };
   }, []);
 
   return (

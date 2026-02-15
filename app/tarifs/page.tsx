@@ -92,37 +92,37 @@ export default function TarifsPage() {
       tagline: "PAR SEMAINE",
       priceMonthly: 75, 
       priceAnnual: 65,
-      features: ["2 Cours / Semaine", "Accès à tous les cours", "Hyrox Inclus", "Badge Accès 6h-22h"],
+      features: ["2 Cours / Semaine", "Accès à tous les cours", "Hyrox Inclus"],
       cta: "CHOISIR", 
       popular: false
     },
     {
-      id: 1, 
-      name: "3 SEANCES", 
+      id: 1,
+      name: "3 SEANCES",
       tagline: "PAR SEMAINE",
-      priceMonthly: 85, 
+      priceMonthly: 95,
       priceAnnual: 75,
-      features: ["3 Cours / Semaine", "Accès à tous les cours", "Hyrox Inclus", "Badge Accès 6h-22h"],
+      features: ["3 Cours / Semaine", "Accès à tous les cours", "Hyrox Inclus"],
       cta: "CHOISIR", 
       popular: false
     },
     {
-      id: 2, 
-      name: "ILLIMITE", 
+      id: 2,
+      name: "ILLIMITE",
       tagline: "ALL ACCESS",
-      priceMonthly: 109, 
+      priceMonthly: 110,
       priceAnnual: 89,
-      features: ["WODs Illimités", "Hyrox Illimité", "Open Gym 7j/7", "Badge Inclus", "Suivi Nutrition"],
+      features: ["WODs Illimités", "Hyrox Illimité", "Open Gym 7j/7", "Badge Free Access Inclus", "Suivi Nutrition"],
       cta: "DEVENIR MEMBRE", 
       popular: true
     },
     {
-      id: 3, 
-      name: "FORCES", 
+      id: 3,
+      name: "FORCES",
       tagline: "POLICE / POMPIER / MILITAIRE",
-      priceMonthly: 50, 
-      priceAnnual: 50, // Prix fixe
-      features: ["Accès Illimité", "Hyrox Inclus", "Badge 6h-22h", "Engagement 1 an", "Justificatif Req."],
+      priceMonthly: 75,
+      priceAnnual: 65,
+      features: ["Accès Illimité", "Hyrox Inclus", "Badge Free Access Inclus", "Justificatif Req."],
       cta: "REJOINDRE", 
       popular: false, 
       special: true
@@ -249,11 +249,11 @@ export default function TarifsPage() {
                      <div className="flex items-start -ml-2 text-white">
                         <span className="text-2xl font-display mt-2 opacity-50">€</span>
                         <span className={`text-7xl lg:text-8xl leading-[0.8] font-display tracking-tighter ${plan.popular ? 'text-primary' : ''}`}>
-                          <AnimatedPrice value={plan.special ? 50 : (isAnnual ? plan.priceAnnual : plan.priceMonthly)} delay={cardDelay + 0.2} />
+                          <AnimatedPrice value={isAnnual ? plan.priceAnnual : plan.priceMonthly} delay={cardDelay + 0.2} />
                         </span>
                      </div>
                      <p className="text-gray-400 text-xs mt-3 pl-2 font-sans uppercase tracking-widest">
-                        {plan.special ? '/ AN' : (isAnnual ? '/ MOIS' : '/ MOIS (LIBRE)')}
+                        {isAnnual ? '/ MOIS' : '/ MOIS (LIBRE)'}
                      </p>
                   </div>
 

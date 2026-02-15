@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Manrope } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "../components/SmoothScroll";
-import Navbar from "../components/Navbar";
-import Cursor from "../components/Cursor";
-import TransitionProvider from "../components/TransitionProvider"; // <--- Le Cerveau de la transition
+import ClientShell from "../components/ClientShell";
 
 const anton = Anton({ weight: "400", subsets: ["latin"], variable: "--font-anton" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
@@ -23,27 +20,18 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
-      <body 
+      <body
         className={`${anton.variable} ${manrope.variable} bg-bg text-offwhite overflow-x-hidden`}
         suppressHydrationWarning={true}
       >
-        {/* On enveloppe TOUT le site dans le provider de transition */}
-        <TransitionProvider>
-          
-          {/* Le Curseur et la Navbar sont dedans pour bénéficier des transitions */}
-          <Cursor />
-          <Navbar />
+        <ClientShell>
+          {children}
 
-          <SmoothScroll>
-            {children}
-            
-            {/* Footer Global */}
-            <footer className="py-12 border-t border-white/10 text-center font-body text-xs text-gray-400 bg-bg relative z-10">
-              CROSSFIT ILLZACH © 2026 • DESIGNED FOR PERFORMANCE
-            </footer>
-          </SmoothScroll>
-
-        </TransitionProvider>
+          {/* Footer Global */}
+          <footer className="py-12 border-t border-white/10 text-center font-body text-xs text-gray-400 bg-bg relative z-10">
+            CROSSFIT ILLZACH © 2026 • made with ❤️ by <a href="https://www.instagram.com/cvz.franco/" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white transition-colors">Franco</a>
+          </footer>
+        </ClientShell>
       </body>
     </html>
   );
