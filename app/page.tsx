@@ -89,7 +89,7 @@ export default function Home() {
 
         // Only 2 scrub-based ScrollTriggers (parallax effects that CSS can't do)
         gsap.to(gorillaRef.current, {
-          yPercent: 30, scale: 1.05, ease: "none",
+          yPercent: 30, ease: "none",
           scrollTrigger: { trigger: containerRef.current, start: "top top", end: "bottom top", scrub: true }
         });
         gsap.to(bgTextRef.current, {
