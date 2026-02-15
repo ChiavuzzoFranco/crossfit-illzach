@@ -8,191 +8,95 @@ export default function Home() {
   const gorillaRef = useRef(null);
   const bgTextRef = useRef(null);
 
+  // --- CSS IntersectionObserver for reveal animations (no GSAP needed) ---
+  useEffect(() => {
+    const revealElements = document.querySelectorAll(
+      '.reveal-on-scroll, .pillar-item, .quote-block, .cta-buttons, .service-card'
+    );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    revealElements.forEach((el) => observer.observe(el));
+
+    // Counter animation (lightweight, no ScrollTrigger)
+    const counterElements = document.querySelectorAll<HTMLElement>('.counter-num');
+    const counterObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            const target = parseInt(el.dataset.count || "0");
+            let current = 0;
+            const step = () => {
+              current += target / 30;
+              if (current >= target) {
+                el.textContent = String(target).padStart(2, "0");
+              } else {
+                el.textContent = String(Math.round(current)).padStart(2, "0");
+                requestAnimationFrame(step);
+              }
+            };
+            requestAnimationFrame(step);
+            counterObserver.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    counterElements.forEach((el) => counterObserver.observe(el));
+
+    return () => { observer.disconnect(); counterObserver.disconnect(); };
+  }, []);
+
+  // --- GSAP only for hero entrance + parallax (2 scrub triggers instead of 12+) ---
   useEffect(() => {
     let ctx: any;
     (async () => {
-      const { default: gsapCore } = await import("gsap");
+      const { default: gsap } = await import("gsap");
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsapCore.registerPlugin(ScrollTrigger);
-      const gsap = gsapCore;
+      gsap.registerPlugin(ScrollTrigger);
 
-    const gsapCtx = gsap.context(() => {
-
-      // ——— HERO ENTRANCE TIMELINE ———
-      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-      // Logo gorille : scale up + fade
-      heroTl.fromTo(gorillaRef.current,
-        { scale: 0.8, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.2 }
-      );
-
-      // Texte de fond ILLZACH : glisse depuis la gauche
-      heroTl.fromTo(bgTextRef.current,
-        { xPercent: -20, opacity: 0 },
-        { xPercent: 0, opacity: 0.2, duration: 1.4, ease: "power2.out" },
-        "-=0.8"
-      );
-
-      // Slogan hero : mots un par un
-      heroTl.fromTo(".hero-title",
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15 },
-        "-=0.6"
-      );
-
-      // Sous-texte hero
-      heroTl.fromTo(".hero-subtitle",
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8 },
-        "-=0.3"
-      );
-
-      // ——— PARALLAXE GORILLE AU SCROLL ———
-      gsap.to(gorillaRef.current, {
-        yPercent: 30,
-        scale: 1.05,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-
-      // ——— PARALLAXE TEXTE DE FOND ———
-      gsap.to(bgTextRef.current, {
-        xPercent: -15,
-        opacity: 0,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "50% top",
-          scrub: 1
-        }
-      });
-
-      // ——— REVEAL ON SCROLL (fade up + léger scale) ———
-      gsap.utils.toArray<HTMLElement>(".reveal-on-scroll").forEach((el) => {
-        gsap.fromTo(el,
+      ctx = gsap.context(() => {
+        // Hero entrance timeline
+        const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        heroTl.fromTo(gorillaRef.current,
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 1.2 }
+        );
+        heroTl.fromTo(bgTextRef.current,
+          { xPercent: -20, opacity: 0 },
+          { xPercent: 0, opacity: 0.2, duration: 1.4, ease: "power2.out" },
+          "-=0.8"
+        );
+        heroTl.fromTo(".hero-title",
           { y: 60, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-            }
-          }
+          { y: 0, opacity: 1, duration: 0.8, stagger: 0.15 },
+          "-=0.6"
         );
-      });
-
-      // ——— BORDURES DES PILIERS : draw de gauche à droite ———
-      gsap.utils.toArray<HTMLElement>(".pillar-item").forEach((item) => {
-        gsap.fromTo(item,
-          { borderColor: "rgba(255,255,255,0)", x: -30, opacity: 0 },
-          {
-            borderColor: "rgba(255,255,255,0.1)",
-            x: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: item,
-              start: "top 85%",
-            }
-          }
+        heroTl.fromTo(".hero-subtitle",
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          "-=0.3"
         );
-      });
 
-      // ——— NUMÉROS 01/02/03 : compteur animé ———
-      gsap.utils.toArray<HTMLElement>(".counter-num").forEach((num) => {
-        const target = parseInt(num.dataset.count || "0");
-        const obj = { val: 0 };
-        gsap.to(obj, {
-          val: target,
-          duration: 1.5,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: num,
-            start: "top 85%",
-          },
-          onUpdate: () => {
-            num.textContent = String(Math.round(obj.val)).padStart(2, "0");
-          }
+        // Only 2 scrub-based ScrollTriggers (parallax effects that CSS can't do)
+        gsap.to(gorillaRef.current, {
+          yPercent: 30, scale: 1.05, ease: "none",
+          scrollTrigger: { trigger: containerRef.current, start: "top top", end: "bottom top", scrub: true }
         });
-      });
-
-      // ——— CARTES SERVICES : stagger avec slide up ———
-      ScrollTrigger.create({
-        trigger: ".services-grid",
-        start: "top 80%",
-        onEnter: () => {
-          gsap.fromTo(".service-card",
-            { y: 80, opacity: 0, scale: 0.95 },
-            {
-              y: 0,
-              opacity: 1,
-              scale: 1,
-              duration: 0.8,
-              stagger: 0.15,
-              ease: "power3.out",
-            }
-          );
-        },
-        once: true,
-      });
-
-      // ——— GRANDS TITRES : parallaxe légère ———
-      gsap.utils.toArray<HTMLElement>(".parallax-title").forEach((title) => {
-        gsap.to(title, {
-          yPercent: -15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: title,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          }
+        gsap.to(bgTextRef.current, {
+          xPercent: -15, opacity: 0,
+          scrollTrigger: { trigger: containerRef.current, start: "top top", end: "50% top", scrub: 1 }
         });
-      });
-
-      // ——— BLOCKQUOTE : slide depuis la gauche ———
-      gsap.fromTo(".quote-block",
-        { x: -80, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".quote-block",
-            start: "top 80%",
-          }
-        }
-      );
-
-      // ——— CTA FINAL : scale up ———
-      gsap.fromTo(".cta-buttons",
-        { y: 40, opacity: 0, scale: 0.9 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          ease: "back.out(1.4)",
-          scrollTrigger: {
-            trigger: ".cta-buttons",
-            start: "top 85%",
-          }
-        }
-      );
-
-    }, containerRef);
-    ctx = gsapCtx;
+      }, containerRef);
     })();
 
     return () => { if (ctx) ctx.revert(); };
