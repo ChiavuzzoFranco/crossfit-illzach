@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Lock, Dumbbell } from "lucide-react";
 import TransitionLink from "../../components/TransitionLink";
 import dynamic from "next/dynamic";
@@ -9,27 +9,6 @@ const AccessBadge3D = dynamic(() => import("@/components/AccessBadge3D"), {
   loading: () => <div className="w-full h-[500px] md:h-[600px]" />,
 });
 
-// Charge AccessBadge3D seulement quand la section est visible
-function LazyBadge() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { rootMargin: "300px" }
-    );
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={ref} className="w-full h-[500px] md:h-[600px]">
-      {visible && <AccessBadge3D />}
-    </div>
-  );
-}
 
 // --- DONNÉES DU PLANNING (facile à modifier) ---
 const SCHEDULE: Record<string, { time: string; type: string }[]> = {
@@ -198,7 +177,7 @@ export default function PlanningPage() {
 
           {/* Badge 3D */}
           <div className="w-full md:w-1/2 shrink-0">
-            <LazyBadge />
+            <AccessBadge3D />
           </div>
 
           {/* Texte */}
@@ -226,7 +205,7 @@ export default function PlanningPage() {
             {/* Bouton */}
             <TransitionLink
               href="/tarifs"
-              className="inline-block bg-primary text-white font-display text-lg px-10 py-4 uppercase tracking-wider hover:bg-white hover:text-black transition-colors"
+              className="block md:inline-block w-full md:w-auto bg-primary text-white font-display text-lg px-10 py-4 uppercase tracking-wider hover:bg-white hover:text-black transition-colors text-center"
             >
               Voir les abonnements
             </TransitionLink>
@@ -242,7 +221,7 @@ export default function PlanningPage() {
          </div>
          <TransitionLink
            href="/contact"
-           className="inline-block bg-primary text-white font-display text-xl px-12 py-5 uppercase tracking-wider hover:bg-white hover:text-black transition-colors text-center shrink-0"
+           className="block md:inline-block w-full md:w-auto bg-primary text-white font-display text-xl px-12 py-5 uppercase tracking-wider hover:bg-white hover:text-black transition-colors text-center shrink-0"
          >
            Nous contacter
          </TransitionLink>
