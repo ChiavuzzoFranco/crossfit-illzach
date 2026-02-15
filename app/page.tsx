@@ -201,9 +201,9 @@ export default function Home() {
 
         {/* Texte Arrière-plan */}
         <div ref={bgTextRef} className="absolute inset-0 flex flex-col items-center justify-center z-0 select-none opacity-20">
-          <h1 className="text-[18vw] leading-[0.8] font-display text-gray-700 text-center whitespace-nowrap">
+          <span aria-hidden="true" className="text-[18vw] leading-[0.8] font-display text-gray-700 text-center whitespace-nowrap block">
             ILLZACH
-          </h1>
+          </span>
         </div>
 
         {/* Gorille */}
@@ -211,9 +211,10 @@ export default function Home() {
            <Image
              src="/logo.png"
              alt="Crossfit Illzach Logo"
-             width={600}
-             height={600}
+             width={500}
+             height={500}
              priority
+             sizes="(max-width: 768px) 80vw, 500px"
              className="w-full h-auto object-contain drop-shadow-2xl"
            />
         </div>
@@ -241,7 +242,7 @@ export default function Home() {
               VOTRE SANTÉ<br/>
               <span className="text-primary">AVANT TOUT.</span>
             </h3>
-            <p className="reveal-on-scroll font-body text-gray-500 text-base leading-relaxed max-w-sm">
+            <p className="reveal-on-scroll font-body text-gray-400 text-base leading-relaxed max-w-sm">
               On ne va pas vous mentir : oui, c&apos;est intense. Mais chaque mouvement est adapté à votre niveau et à votre corps. Nos coachs sont là pour ça — pas pour vous pousser dans vos retranchements, mais pour vous accompagner vers la meilleure version de vous-même.
             </p>
             <div className="mt-10 reveal-on-scroll">
@@ -257,10 +258,10 @@ export default function Home() {
             {/* 1. Sécurité & Adaptation */}
             <div className="pillar-item group py-10 border-t border-white/10">
               <div className="flex items-baseline gap-4 mb-3">
-                <span className="counter-num font-body text-xs text-primary/60" data-count="1">00</span>
+                <span className="counter-num font-body text-xs text-primary" data-count="1">00</span>
                 <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">SÉCURITÉ & ADAPTATION</h4>
               </div>
-              <p className="font-body text-gray-500 text-sm leading-relaxed md:pl-10">
+              <p className="font-body text-gray-400 text-sm leading-relaxed md:pl-10">
                 Mal au genou ? Reprise après une grossesse ? Première fois en salle ? On adapte tout. <strong className="text-gray-300">Chaque exercice a une version pour vous.</strong> Zéro ego, zéro pression.
               </p>
             </div>
@@ -268,10 +269,10 @@ export default function Home() {
             {/* 2. Zéro Jugement */}
             <div className="pillar-item group py-10 border-t border-white/10">
               <div className="flex items-baseline gap-4 mb-3">
-                <span className="counter-num font-body text-xs text-primary/60" data-count="2">00</span>
+                <span className="counter-num font-body text-xs text-primary" data-count="2">00</span>
                 <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">ZÉRO JUGEMENT</h4>
               </div>
-              <p className="font-body text-gray-500 text-sm leading-relaxed md:pl-10">
+              <p className="font-body text-gray-400 text-sm leading-relaxed md:pl-10">
                 Le seul regard que vous croiserez ici, c&apos;est celui de quelqu&apos;un qui vous encourage. On a des adhérents de 18 à 65 ans, des sportifs du dimanche et des compétiteurs. <strong className="text-gray-300">Tout le monde cohabite, tout le monde progresse.</strong>
               </p>
             </div>
@@ -279,10 +280,10 @@ export default function Home() {
             {/* 3. L'Humain au Centre */}
             <div className="pillar-item group py-10 border-t border-white/10 border-b">
               <div className="flex items-baseline gap-4 mb-3">
-                <span className="counter-num font-body text-xs text-primary/60" data-count="3">00</span>
+                <span className="counter-num font-body text-xs text-primary" data-count="3">00</span>
                 <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">L&apos;HUMAIN AU CENTRE</h4>
               </div>
-              <p className="font-body text-gray-500 text-sm leading-relaxed md:pl-10">
+              <p className="font-body text-gray-400 text-sm leading-relaxed md:pl-10">
                 On connaît votre prénom, vos objectifs, et même votre café préféré. Ici, vous n&apos;êtes pas un numéro d&apos;adhérent. <strong className="text-gray-300">Quand vous passez la porte, on sait si vous avez passé une bonne journée.</strong>
               </p>
             </div>
@@ -308,7 +309,7 @@ export default function Home() {
             </p>
           </blockquote>
 
-          <p className="reveal-on-scroll font-body text-gray-500 text-base leading-relaxed max-w-2xl mx-auto">
+          <p className="reveal-on-scroll font-body text-gray-400 text-base leading-relaxed max-w-2xl mx-auto">
             Le WOD se termine. Les barres se posent. Et là, c&apos;est le meilleur moment : on se tape dans les mains, on se charrie, on se félicite. Puis direction l&apos;espace détente pour un café (ou une protéine, chacun son truc). <strong className="text-gray-300">C&apos;est dans ces moments-là que les amitiés se créent. Et c&apos;est pour ça qu&apos;on revient.</strong>
           </p>
         </div>
@@ -327,9 +328,9 @@ export default function Home() {
             {/* Carte WOD */}
             <div className="service-card group border border-white/10 p-8 md:p-10 hover:border-primary/50 transition-colors duration-500 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
-              <span className="counter-num font-body text-xs text-primary/60 block mb-4" data-count="1">00</span>
+              <span className="counter-num font-body text-xs text-primary block mb-4" data-count="1">00</span>
               <h4 className="font-display text-2xl mb-4 text-white group-hover:text-primary transition-colors">LE WOD</h4>
-              <p className="font-body text-gray-500 text-sm leading-relaxed">
+              <p className="font-body text-gray-400 text-sm leading-relaxed">
                 Une heure ensemble, encadrée de A à Z. On s&apos;échauffe, on apprend, on se dépasse — et on finit toujours avec le sourire (même après les burpees).
               </p>
             </div>
@@ -337,9 +338,9 @@ export default function Home() {
             {/* Carte Gym & Haltéro */}
             <div className="service-card group border border-white/10 p-8 md:p-10 hover:border-primary/50 transition-colors duration-500 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
-              <span className="counter-num font-body text-xs text-primary/60 block mb-4" data-count="2">00</span>
+              <span className="counter-num font-body text-xs text-primary block mb-4" data-count="2">00</span>
               <h4 className="font-display text-2xl mb-4 text-white group-hover:text-primary transition-colors">GYM & HALTÉROPHILIE</h4>
-              <p className="font-body text-gray-500 text-sm leading-relaxed">
+              <p className="font-body text-gray-400 text-sm leading-relaxed">
                 Envie de maîtriser les mouvements gymniques ou de soulever votre première barre ? Ces créneaux sont faits pour ça. Technique d&apos;abord, charge ensuite. Toujours avec un coach à côté.
               </p>
             </div>
@@ -347,9 +348,9 @@ export default function Home() {
             {/* Carte Coaching */}
             <div className="service-card group border border-white/10 p-8 md:p-10 hover:border-primary/50 transition-colors duration-500 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
-              <span className="counter-num font-body text-xs text-primary/60 block mb-4" data-count="3">00</span>
+              <span className="counter-num font-body text-xs text-primary block mb-4" data-count="3">00</span>
               <h4 className="font-display text-2xl mb-4 text-white group-hover:text-primary transition-colors">COACHING PERSONNALISÉ</h4>
-              <p className="font-body text-gray-500 text-sm leading-relaxed">
+              <p className="font-body text-gray-400 text-sm leading-relaxed">
                 Un objectif précis ? Un retour de blessure ? Un défi sportif ? On construit ensemble un programme qui vous ressemble, avec un suivi régulier et humain.
               </p>
             </div>
@@ -371,7 +372,7 @@ export default function Home() {
           <h3 className="reveal-on-scroll parallax-title font-display text-4xl md:text-7xl leading-[0.9] mb-10">
             UNE ÉQUIPE PASSIONNÉE<br/><span className="text-primary">À VOS CÔTÉS</span>
           </h3>
-          <p className="reveal-on-scroll font-body text-gray-500 text-base leading-relaxed max-w-2xl mx-auto mb-8">
+          <p className="reveal-on-scroll font-body text-gray-400 text-base leading-relaxed max-w-2xl mx-auto mb-8">
             On ne compte pas les répétitions depuis un bureau. On est sur le plateau, avec vous, à chaque séance. On corrige, on motive, on plaisante — et quand vous battez un record, c&apos;est nous qui crions le plus fort. Notre porte est toujours ouverte : pour parler de votre programme, d&apos;un petit bobo, ou juste pour dire bonjour.
           </p>
           <div className="reveal-on-scroll">

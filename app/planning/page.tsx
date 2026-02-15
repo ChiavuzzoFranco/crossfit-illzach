@@ -3,7 +3,12 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { Lock, Dumbbell } from "lucide-react";
 import TransitionLink from "../../components/TransitionLink";
-import AccessBadge3D from "@/components/AccessBadge3D";
+import dynamic from "next/dynamic";
+
+const AccessBadge3D = dynamic(() => import("@/components/AccessBadge3D"), {
+  ssr: false,
+  loading: () => <div className="w-full h-[500px] md:h-[600px]" />,
+});
 
 // --- DONNÉES DU PLANNING (facile à modifier) ---
 const SCHEDULE: Record<string, { time: string; type: string }[]> = {
@@ -114,7 +119,7 @@ export default function PlanningPage() {
               <div className="hidden md:grid md:grid-cols-3 group">
                 {/* Colonne Jour */}
                 <div className="col-span-1">
-                  <span className="font-display text-4xl text-gray-500 group-hover:text-primary transition-colors">{day}</span>
+                  <span className="font-display text-4xl text-gray-400 group-hover:text-primary transition-colors">{day}</span>
                 </div>
 
                 {/* Colonne Matin */}
@@ -174,7 +179,7 @@ export default function PlanningPage() {
 
           {/* Texte */}
           <div className="w-full md:w-1/2">
-            <p className="font-display text-lg text-gray-500 tracking-widest mb-1">EN DEHORS DES COURS</p>
+            <p className="font-display text-lg text-gray-400 tracking-widest mb-1">EN DEHORS DES COURS</p>
             <h2 className="font-display text-5xl md:text-6xl text-primary mb-6">ACCÈS LIBRE</h2>
             <p className="font-body text-gray-400 text-lg leading-relaxed mb-8">
               Pas de cours à votre horaire ? Avec votre badge, accédez à la Box{" "}
@@ -209,7 +214,7 @@ export default function PlanningPage() {
       <div className="mt-24 pt-12 border-t border-white/20 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
          <div>
            <h2 className="font-display text-4xl mb-2">UNE QUESTION ?</h2>
-           <p className="font-body text-gray-500">Premier cours d&apos;essai, horaires, niveau requis... on répond à tout.</p>
+           <p className="font-body text-gray-400">Premier cours d&apos;essai, horaires, niveau requis... on répond à tout.</p>
          </div>
          <TransitionLink
            href="/contact"

@@ -294,7 +294,7 @@ export default function Concept() {
       {/* LISTE */}
       <section className="list-container px-6 md:px-12 mb-32 max-w-[1600px] mx-auto">
         <div className="mb-12">
-            <h2 className="font-display text-sm text-gray-500 uppercase tracking-widest mb-2">Nos Programmes</h2>
+            <h2 className="font-display text-sm text-gray-400 uppercase tracking-widest mb-2">Nos Programmes</h2>
             <p className="font-body text-2xl text-white">Quelle discipline est faite pour vous ?</p>
         </div>
         <div className="flex flex-col border-t border-white/10">
@@ -319,7 +319,7 @@ export default function Concept() {
                <div className="relative z-20 w-full md:w-1/3 text-left md:text-right pointer-events-none mt-4 md:mt-0 md:pl-0">
                   <p className="font-body text-gray-400 text-xs md:text-sm mb-3 md:mb-2">{item.subtitle}</p>
                   <div className="flex justify-start md:justify-end gap-2">
-                    {item.tags.map((tag:string) => <span key={tag} className="border border-white/20 px-2 py-1 text-[10px] uppercase tracking-wide text-gray-500 group-hover:text-white group-hover:border-white transition-colors">{tag}</span>)}
+                    {item.tags.map((tag:string) => <span key={tag} className="border border-white/20 px-2 py-1 text-[10px] uppercase tracking-wide text-gray-400 group-hover:text-white group-hover:border-white transition-colors">{tag}</span>)}
                   </div>
                </div>
             </div>
@@ -395,13 +395,13 @@ export default function Concept() {
                                 </div>
                                 <div className="space-y-8 bg-white/[0.03] p-8 border border-white/10 rounded-lg backdrop-blur-sm">
                                     <div>
-                                        <h4 className="font-display text-xs text-gray-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                        <h4 className="font-display text-xs text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
                                             <Target size={14}/> FOCUS
                                         </h4>
                                         <p className="text-white text-lg">{selectedClass.focus}</p>
                                     </div>
                                     <div>
-                                        <h4 className="font-display text-xs text-gray-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                        <h4 className="font-display text-xs text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
                                             <Clock size={14}/> DÉROULEMENT
                                         </h4>
                                         <p className="text-white text-lg">{selectedClass.structure}</p>

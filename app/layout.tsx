@@ -19,6 +19,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
+      <head>
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+      </head>
       <body 
         className={`${anton.variable} ${manrope.variable} bg-bg text-offwhite overflow-x-hidden`}
         suppressHydrationWarning={true}
@@ -34,7 +38,7 @@ export default function RootLayout({
             {children}
             
             {/* Footer Global */}
-            <footer className="py-12 border-t border-white/10 text-center font-body text-xs text-gray-500 bg-bg relative z-10">
+            <footer className="py-12 border-t border-white/10 text-center font-body text-xs text-gray-400 bg-bg relative z-10">
               CROSSFIT ILLZACH © 2026 • DESIGNED FOR PERFORMANCE
             </footer>
           </SmoothScroll>

@@ -81,20 +81,20 @@ function ContactContent() {
           <div className="space-y-8 contact-reveal">
             <div>
               <h3 className="font-display text-2xl mb-2 text-white">ADRESSE</h3>
-              <p className="font-body text-gray-500 leading-relaxed">
+              <p className="font-body text-gray-400 leading-relaxed">
                 4 Rue de Lisbonne<br/>
                 68110 Illzach, France
               </p>
             </div>
             <div>
               <h3 className="font-display text-2xl mb-2 text-white">EMAIL</h3>
-              <a href="mailto:contact@crossfit-illzach.fr" className="font-body text-gray-500 hover:text-primary transition-colors">
+              <a href="mailto:contact@crossfit-illzach.fr" className="font-body text-gray-400 hover:text-primary transition-colors">
                 contact@crossfit-illzach.fr
               </a>
             </div>
             <div>
                <h3 className="font-display text-2xl mb-2 text-white">SOCIAL</h3>
-               <div className="flex gap-4 font-body text-sm uppercase text-gray-500">
+               <div className="flex gap-4 font-body text-sm uppercase text-gray-400">
                  <a href="#" className="hover:text-primary transition-colors">Instagram</a>
                  <a href="#" className="hover:text-primary transition-colors">Facebook</a>
                </div>
@@ -114,7 +114,7 @@ function ContactContent() {
                 <CheckCircle size={48} className="text-primary mb-6" />
                 <h2 className="font-display text-3xl mb-2 text-white">MESSAGE REÇU</h2>
                 <p className="text-gray-400 font-body">Le staff te recontacte très vite.</p>
-                <button onClick={() => setIsSuccess(false)} className="mt-8 text-xs underline decoration-primary underline-offset-4 hover:text-white text-gray-500 transition-colors">
+                <button onClick={() => setIsSuccess(false)} className="mt-8 text-xs underline decoration-primary underline-offset-4 hover:text-white text-gray-400 transition-colors">
                   Envoyer un autre message
                 </button>
               </div>
@@ -132,7 +132,7 @@ function ContactContent() {
                 {/* BANDEAU SI CRÉNEAU SÉLECTIONNÉ */}
                 {selectedCreneau && (
                    <div className="pb-4 border-b border-white/10 mb-6 flex justify-between items-end">
-                      <span className="font-display text-gray-500 text-sm tracking-widest">CRÉNEAU</span>
+                      <span className="font-display text-gray-400 text-sm tracking-widest">CRÉNEAU</span>
                       <span className="font-display text-primary text-xl uppercase">{selectedCreneau}</span>
                    </div>
                 )}
@@ -140,35 +140,35 @@ function ContactContent() {
                 {/* BANDEAU SI ABONNEMENT SÉLECTIONNÉ (uniquement si pas de créneau) */}
                 {!selectedCreneau && selectedPlan && (
                    <div className="pb-4 border-b border-white/10 mb-6 flex justify-between items-end">
-                      <span className="font-display text-gray-500 text-sm tracking-widest">SUJET</span>
+                      <span className="font-display text-gray-400 text-sm tracking-widest">SUJET</span>
                       <span className="font-display text-primary text-xl uppercase">{selectedPlan}</span>
                    </div>
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="flex flex-col gap-2">
-                    <label className="font-display text-sm tracking-widest text-gray-500">PRÉNOM</label>
+                    <label className="font-display text-sm tracking-widest text-gray-400">PRÉNOM</label>
                     <input required type="text" name="prenom" className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors w-full" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="font-display text-sm tracking-widest text-gray-500">NOM</label>
+                    <label className="font-display text-sm tracking-widest text-gray-400">NOM</label>
                     <input required type="text" name="nom" className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors w-full" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="flex flex-col gap-2">
-                    <label className="font-display text-sm tracking-widest text-gray-500">EMAIL</label>
+                    <label className="font-display text-sm tracking-widest text-gray-400">EMAIL</label>
                     <input required type="email" name="email" className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors w-full" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="font-display text-sm tracking-widest text-gray-500">TÉLÉPHONE</label>
+                    <label className="font-display text-sm tracking-widest text-gray-400">TÉLÉPHONE</label>
                     <input required type="tel" name="telephone" className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors w-full" />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="font-display text-sm tracking-widest text-gray-500">MESSAGE</label>
+                  <label className="font-display text-sm tracking-widest text-gray-400">MESSAGE</label>
                   <textarea 
                     name="message" 
                     rows={4} 

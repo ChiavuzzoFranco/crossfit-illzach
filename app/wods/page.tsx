@@ -79,7 +79,7 @@ export default function LaBox() {
             </p>
           </div>
           <div className="md:col-span-7 reveal-hero flex justify-start md:justify-end">
-             <div className="flex gap-4 text-xs font-body uppercase tracking-widest text-gray-500">
+             <div className="flex gap-4 text-xs font-body uppercase tracking-widest text-gray-400">
                 <span>/// Zone Industrielle Illzach</span>
                 <span>/// Parking Gratuit</span>
              </div>

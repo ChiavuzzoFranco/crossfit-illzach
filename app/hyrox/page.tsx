@@ -115,7 +115,7 @@ export default function HyroxPage() {
             <div className="hidden md:block w-px h-8 bg-white/20"></div>
             <div className="flex items-center gap-3"><Timer className="text-primary" /><span>1 Seul Chrono</span></div>
           </div>
-          <p className="hero-fade mt-6 text-gray-500 font-body text-sm md:text-base max-w-xl mx-auto">
+          <p className="hero-fade mt-6 text-gray-400 font-body text-sm md:text-base max-w-xl mx-auto">
             Pas besoin d&apos;être un athlète pour se lancer. On vous prépare, on vous accompagne, on court avec vous.
           </p>
         </div>
@@ -166,7 +166,7 @@ export default function HyroxPage() {
       <section className="formats-section py-24 px-6 md:px-12 bg-[#080808] border-y border-white/5">
         <div className="max-w-5xl mx-auto text-center">
           <h3 className="font-display text-4xl md:text-6xl mb-4">FORMATS DE COURSE</h3>
-          <p className="text-gray-500 font-body mb-16">Choisissez votre façon de courir.</p>
+          <p className="text-gray-400 font-body mb-16">Choisissez votre façon de courir.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {formats.map((format) => (
               <div key={format.name} className="format-card bg-[#0A0A0A] border border-white/10 p-8 hover:border-primary/50 transition-colors duration-500 group">
@@ -197,7 +197,7 @@ export default function HyroxPage() {
                 </li>
               ))}
             </ul>
-            <p className="text-gray-500 font-body text-sm mb-10 italic">Que vous prépariez votre première course ou que vous visiez le podium, le programme s&apos;adapte à votre niveau.</p>
+            <p className="text-gray-400 font-body text-sm mb-10 italic">Que vous prépariez votre première course ou que vous visiez le podium, le programme s&apos;adapte à votre niveau.</p>
             <TransitionLink href="/planning" className="group inline-block px-8 py-4 bg-white text-black font-display uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-300 relative overflow-hidden">
               <span className="relative z-10">Voir le Planning</span>
               <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
@@ -206,11 +206,11 @@ export default function HyroxPage() {
           <div className="grid grid-cols-2 gap-4">
              <div className="bg-[#050505] p-8 border border-white/10 flex flex-col items-center justify-center text-center hover:border-primary transition-colors duration-500 group reveal-text delay-100">
                 <span className="font-display text-5xl text-white mb-2 group-hover:text-primary transition-colors">50%</span>
-                <span className="text-xs text-gray-500 uppercase tracking-widest">Running</span>
+                <span className="text-xs text-gray-400 uppercase tracking-widest">Running</span>
              </div>
              <div className="bg-[#050505] p-8 border border-white/10 flex flex-col items-center justify-center text-center hover:border-primary transition-colors duration-500 group reveal-text delay-200">
                 <span className="font-display text-5xl text-white mb-2 group-hover:text-primary transition-colors">50%</span>
-                <span className="text-xs text-gray-500 uppercase tracking-widest">Functional</span>
+                <span className="text-xs text-gray-400 uppercase tracking-widest">Functional</span>
              </div>
              <div className="col-span-2 bg-primary p-8 flex items-center justify-between group cursor-pointer hover:bg-white transition-colors duration-300 reveal-text delay-300">
                 <div><span className="block font-display text-3xl text-black">SIMULATIONS</span><span className="text-black/70 text-sm">Organisées chaque trimestre</span></div>

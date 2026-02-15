@@ -3,7 +3,12 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Clock, Lock, Zap, MapPin, Trophy, Dumbbell } from "lucide-react";
-import AccessBadge3D from "../../components/AccessBadge3D"; 
+import dynamic from "next/dynamic";
+
+const AccessBadge3D = dynamic(() => import("../../components/AccessBadge3D"), {
+  ssr: false,
+  loading: () => <div className="w-full h-[500px] md:h-[600px]" />,
+});
 
 gsap.registerPlugin(ScrollTrigger);
 

@@ -239,7 +239,7 @@ export default function TarifsPage() {
                      <h3 className="font-display text-3xl mb-1 text-white tracking-wide">
                        <ScrambleText text={plan.name} delay={cardDelay} trigger={isLoaded} />
                      </h3>
-                     <p className="text-gray-500 text-[10px] font-sans tracking-widest uppercase">
+                     <p className="text-gray-400 text-[10px] font-sans tracking-widest uppercase">
                        {plan.tagline}
                      </p>
                   </div>
@@ -252,7 +252,7 @@ export default function TarifsPage() {
                           <AnimatedPrice value={plan.special ? 50 : (isAnnual ? plan.priceAnnual : plan.priceMonthly)} delay={cardDelay + 0.2} />
                         </span>
                      </div>
-                     <p className="text-gray-500 text-xs mt-3 pl-2 font-sans uppercase tracking-widest">
+                     <p className="text-gray-400 text-xs mt-3 pl-2 font-sans uppercase tracking-widest">
                         {plan.special ? '/ AN' : (isAnnual ? '/ MOIS' : '/ MOIS (LIBRE)')}
                      </p>
                   </div>
@@ -292,7 +292,7 @@ export default function TarifsPage() {
 
       {/* --- FOOTER --- */}
       <div className="max-w-7xl mx-auto px-6 mt-20 text-center border-t border-white/5 pt-12 pb-20">
-        <p className="text-gray-500 text-xs font-sans uppercase tracking-widest">
+        <p className="text-gray-400 text-xs font-sans uppercase tracking-widest">
           CAUTION BADGE : 20€ &nbsp;|&nbsp; ACCÈS IMMÉDIAT
         </p>
       </div>
