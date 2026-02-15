@@ -71,26 +71,26 @@ function Card() {
           MEMBRE
         </Text>
 
-        {/* "PASS" */}
-        <Text 
-          position={[-1.05, -0.1, 0]} 
-          fontSize={0.55} 
-          color="#ffffff" 
+        {/* "FREE" */}
+        <Text
+          position={[-1.05, -0.1, 0]}
+          fontSize={0.55}
+          color="#ffffff"
           anchorX="left"
-          font={titleFont} // Utilise Anton local
+          font={titleFont}
         >
-          PASS
+          FREE
         </Text>
 
-        {/* "ACCÈS" */}
-        <Text 
-          position={[-1.0, -0.7, 0]} 
-          fontSize={0.35} 
-          color="#FF3300" 
+        {/* "ACCESS" */}
+        <Text
+          position={[-1.0, -0.7, 0]}
+          fontSize={0.35}
+          color="#FF3300"
           anchorX="left"
-          font={titleFont} // Utilise Anton local
+          font={titleFont}
         >
-          ACCÈS
+          ACCESS
         </Text>
 
         {/* LIGNE */}

@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { Play, TrendingUp, Timer, Dumbbell, Users, User } from 'lucide-react';
+import { Play, TrendingUp, Timer, Dumbbell, Users, User, Users2 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import TransitionLink from '@/components/TransitionLink';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,19 +11,25 @@ export default function HyroxPage() {
   const mainRef = useRef<HTMLDivElement>(null);
 
   const stations = [
-    { id: '01', name: 'SKI ERG', dist: '1000m', desc: 'Tout commence par les bras. Gestion de l\'acide lactique immédiate.', image: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=1000&auto=format&fit=crop' },
-    { id: '02', name: 'SLED PUSH', dist: '50m', desc: 'Poussée de traîneau lourd. La force pure rencontre le cardio.', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1000&auto=format&fit=crop' },
-    { id: '03', name: 'SLED PULL', dist: '50m', desc: 'Tirage de traîneau. Dos, biceps et fessiers en feu.', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1000&auto=format&fit=crop' },
-    { id: '04', name: 'BURPEES BROAD JUMP', dist: '80m', desc: 'L\'épreuve mentale par excellence. Sauter, ramper, répéter.', image: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=1000&auto=format&fit=crop' },
-    { id: '05', name: 'ROWING', dist: '1000m', desc: 'Le rameur. Rester lucide, garder le rythme malgré la fatigue.', image: 'https://images.unsplash.com/photo-1540497077202-7c8a33801524?q=80&w=1000&auto=format&fit=crop' },
-    { id: '06', name: 'FARMERS CARRY', dist: '200m', desc: 'Marche du fermier avec Kettlebells. Grip et gainage à l\'épreuve.', image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1000&auto=format&fit=crop' },
-    { id: '07', name: 'SANDBAG LUNGES', dist: '100m', desc: 'Fentes avec sac de sable. Les jambes tremblent, le mental tient.', image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1000&auto=format&fit=crop' },
-    { id: '08', name: 'WALL BALLS', dist: '75 / 100 reps', desc: 'Le final. Squat, lancer, précision. Jusqu\'à la dernière rep.', image: 'https://images.unsplash.com/photo-1532029837066-805e45167275?q=80&w=1000&auto=format&fit=crop' }
+    { id: '01', name: 'SKI ERG', dist: '1000m', desc: 'Le départ. Les bras chauffent, le souffle s\'accélère. Premier test : gérer son allure dès le début.', image: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=1000&auto=format&fit=crop' },
+    { id: '02', name: 'SLED PUSH', dist: '50m', desc: 'Poussez. Fort. 152kg (hommes) ou 102kg (femmes) de traîneau. C\'est là que la force brute fait la différence.', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1000&auto=format&fit=crop' },
+    { id: '03', name: 'SLED PULL', dist: '50m', desc: 'Vous tirez le même traîneau vers vous, main après main. Le dos et les bras en feu, mais on ne lâche rien.', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1000&auto=format&fit=crop' },
+    { id: '04', name: 'BURPEES BROAD JUMP', dist: '80m', desc: 'L\'épreuve que tout le monde redoute. 80 mètres de burpees-sauts. Le mental prend le dessus.', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1000&auto=format&fit=crop' },
+    { id: '05', name: 'ROWING', dist: '1000m', desc: '1000m de rameur. Le piège : partir trop vite. La clé : rester lucide malgré la fatigue.', image: 'https://images.unsplash.com/photo-1540497077202-7c8a33801524?q=80&w=1000&auto=format&fit=crop' },
+    { id: '06', name: 'FARMERS CARRY', dist: '200m', desc: '200m avec deux kettlebells de 24kg (H) ou 16kg (F). Le grip lâche, le gainage tient.', image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1000&auto=format&fit=crop' },
+    { id: '07', name: 'SANDBAG LUNGES', dist: '100m', desc: 'Fentes avec un sac de 20kg sur les épaules. Les jambes tremblent, chaque pas compte.', image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1000&auto=format&fit=crop' },
+    { id: '08', name: 'WALL BALLS', dist: '75 / 100 reps', desc: 'Le final. 75 (F) ou 100 (H) lancers de medball. Squat, lancé, précision. Jusqu\'à la dernière rep.', image: 'https://images.unsplash.com/photo-1532029837066-805e45167275?q=80&w=1000&auto=format&fit=crop' }
+  ];
+
+  const formats = [
+    { icon: User, name: 'Solo', desc: 'Vous courez seul. Vous faites tout seul. Le chrono n\'appartient qu\'à vous.' },
+    { icon: Users, name: 'Doubles', desc: 'Deux athlètes, un chrono. Vous alternez les stations. Stratégie et complémentarité.' },
+    { icon: Users2, name: 'Relay (4 pers.)', desc: 'Chacun fait 2 stations + 2km. L\'esprit d\'équipe version Hyrox.' },
   ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      
+
       // --- HERO ---
       const tl = gsap.timeline();
       tl.from(".hero-title-char", { y: 150, opacity: 0, rotate: 5, stagger: 0.1, duration: 1.2, ease: "power4.out" })
@@ -43,11 +50,17 @@ export default function HyroxPage() {
         gsap.to(img, { y: "20%", ease: "none", scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true } });
       });
 
+      // --- FORMATS REVEAL ---
+      gsap.from(".format-card", {
+        y: 40, opacity: 0, stagger: 0.15, duration: 0.8,
+        scrollTrigger: { trigger: ".formats-section", start: "top 80%" }
+      });
+
       // --- TRAINING REVEAL ---
       const texts = gsap.utils.toArray('.reveal-text');
       texts.forEach((text: any) => {
-        gsap.fromTo(text, 
-          { y: "100%", skewY: 7 }, 
+        gsap.fromTo(text,
+          { y: "100%", skewY: 7 },
           { y: "0%", skewY: 0, duration: 1.2, ease: "power4.out", scrollTrigger: { trigger: text.parentElement, start: "top 80%" } }
         );
       });
@@ -57,19 +70,19 @@ export default function HyroxPage() {
         scrollTrigger: { trigger: ".training-list", start: "top 80%" }
       });
 
-      // --- NEW: CTA SCROLL ANIMATION (Split & Converge) ---
+      // --- CTA SCROLL ANIMATION ---
       const ctaTl = gsap.timeline({
         scrollTrigger: {
-          trigger: ".cta-section", // On déclenche sur la section
-          start: "top 80%",        // Quand le haut de la section est à 80% de l'écran
-          end: "center center",    // Jusqu'à ce qu'elle soit au centre
-          scrub: 1,                // Mouvement fluide lié au scroll
+          trigger: ".cta-section",
+          start: "top 80%",
+          end: "center center",
+          scrub: 1,
         }
       });
 
       ctaTl
-        .from(".cta-text-1", { x: -150, opacity: 0, filter: "blur(10px)" }, 0) // Vient de gauche
-        .from(".cta-text-2", { x: 150, opacity: 0, filter: "blur(10px)" }, 0); // Vient de droite (en même temps)
+        .from(".cta-text-1", { x: -150, opacity: 0, filter: "blur(10px)" }, 0)
+        .from(".cta-text-2", { x: 150, opacity: 0, filter: "blur(10px)" }, 0);
 
     }, mainRef);
 
@@ -78,7 +91,7 @@ export default function HyroxPage() {
 
   return (
     <main ref={mainRef} className="min-h-screen bg-bg text-white selection:bg-primary selection:text-white overflow-hidden">
-      
+
       {/* SECTION HERO */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
@@ -102,6 +115,9 @@ export default function HyroxPage() {
             <div className="hidden md:block w-px h-8 bg-white/20"></div>
             <div className="flex items-center gap-3"><Timer className="text-primary" /><span>1 Seul Chrono</span></div>
           </div>
+          <p className="hero-fade mt-6 text-gray-500 font-body text-sm md:text-base max-w-xl mx-auto">
+            Pas besoin d&apos;être un athlète pour se lancer. On vous prépare, on vous accompagne, on court avec vous.
+          </p>
         </div>
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 hero-fade">
           <span className="text-[10px] uppercase tracking-widest">The Race</span>
@@ -114,10 +130,6 @@ export default function HyroxPage() {
         <div className="max-w-7xl mx-auto">
             <div className="mb-20 text-center">
                 <h3 className="font-display text-5xl md:text-7xl mb-6">LE CIRCUIT</h3>
-                <div className="flex justify-center gap-4 mb-6">
-                  <div className="flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 rounded uppercase font-display tracking-widest text-sm"><User size={16} className="text-primary" /><span>Solo</span></div>
-                  <div className="flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 rounded uppercase font-display tracking-widest text-sm"><Users size={16} className="text-primary" /><span>Duo / Double</span></div>
-                </div>
                 <p className="text-gray-400 max-w-xl mx-auto font-body">8 tours. 1km run. 1 workout.</p>
             </div>
             <div className="relative mt-32 timeline-container">
@@ -150,6 +162,23 @@ export default function HyroxPage() {
         </div>
       </section>
 
+      {/* SECTION FORMATS DE COURSE */}
+      <section className="formats-section py-24 px-6 md:px-12 bg-[#080808] border-y border-white/5">
+        <div className="max-w-5xl mx-auto text-center">
+          <h3 className="font-display text-4xl md:text-6xl mb-4">FORMATS DE COURSE</h3>
+          <p className="text-gray-500 font-body mb-16">Choisissez votre façon de courir.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {formats.map((format) => (
+              <div key={format.name} className="format-card bg-[#0A0A0A] border border-white/10 p-8 hover:border-primary/50 transition-colors duration-500 group">
+                <format.icon size={32} className="text-primary mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                <h4 className="font-display text-2xl uppercase mb-3">{format.name}</h4>
+                <p className="text-gray-400 font-body text-sm leading-relaxed">{format.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* SECTION TRAINING */}
       <section className="py-24 bg-[#0A0A0A] border-y border-white/5 relative z-10">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
@@ -157,10 +186,10 @@ export default function HyroxPage() {
           <div>
             <h3 className="font-display text-5xl md:text-7xl mb-8 leading-none">
               <div className="overflow-hidden"><div className="reveal-text">PRÉPARER</div></div>
-              <div className="overflow-hidden"><div className="reveal-text text-primary">L'IMPOSSIBLE.</div></div>
+              <div className="overflow-hidden"><div className="reveal-text text-primary">L&apos;IMPOSSIBLE.</div></div>
             </h3>
-            <div className="overflow-hidden mb-8"><p className="reveal-text text-gray-400 font-body text-lg">Hyrox ne demande pas d'être le meilleur coureur ou le plus fort haltérophile. Hyrox demande d'être complet.</p></div>
-            <ul className="space-y-4 mb-10 training-list">
+            <div className="overflow-hidden mb-8"><p className="reveal-text text-gray-400 font-body text-lg">Hyrox, c&apos;est ni un marathon, ni du CrossFit pur. C&apos;est un format unique qui demande d&apos;être complet : savoir courir, savoir pousser, savoir tenir. On vous prépare à chaque aspect avec un programme structuré et progressif.</p></div>
+            <ul className="space-y-4 mb-6 training-list">
               {['Endurance Fondamentale', 'Résistance Lactique', 'Force Fonctionnelle', 'Stratégie de Course'].map((item) => (
                 <li key={item} className="training-item flex items-center gap-3 font-display tracking-wide group cursor-default">
                   <div className="w-1.5 h-1.5 bg-primary group-hover:scale-150 transition-transform"></div>
@@ -168,10 +197,11 @@ export default function HyroxPage() {
                 </li>
               ))}
             </ul>
-            <button className="group px-8 py-4 bg-white text-black font-display uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-300 relative overflow-hidden">
+            <p className="text-gray-500 font-body text-sm mb-10 italic">Que vous prépariez votre première course ou que vous visiez le podium, le programme s&apos;adapte à votre niveau.</p>
+            <TransitionLink href="/planning" className="group inline-block px-8 py-4 bg-white text-black font-display uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-300 relative overflow-hidden">
               <span className="relative z-10">Voir le Planning</span>
               <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
-            </button>
+            </TransitionLink>
           </div>
           <div className="grid grid-cols-2 gap-4">
              <div className="bg-[#050505] p-8 border border-white/10 flex flex-col items-center justify-center text-center hover:border-primary transition-colors duration-500 group reveal-text delay-100">
@@ -190,42 +220,36 @@ export default function HyroxPage() {
         </div>
       </section>
 
-      {/* --- SECTION 4: CTA (AVEC EFFET SCROLL) --- */}
+      {/* SECTION CTA */}
       <section className="cta-section h-[80vh] flex flex-col items-center justify-center text-center px-6 relative overflow-hidden bg-[#050505]">
-        
-        {/* FOND : Grille Tactique */}
-        <div className="absolute inset-0 z-0 opacity-20" 
-             style={{ 
-               backgroundImage: 'linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)', 
-               backgroundSize: '100px 100px' 
+
+        <div className="absolute inset-0 z-0 opacity-20"
+             style={{
+               backgroundImage: 'linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)',
+               backgroundSize: '100px 100px'
              }}>
         </div>
 
-        {/* EFFET RADAR */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-primary/20 rounded-full animate-[ping_4s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-primary/10 rounded-full animate-[ping_4s_cubic-bezier(0,0,0.2,1)_infinite_1s]"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-primary/5 rounded-full animate-[ping_4s_cubic-bezier(0,0,0.2,1)_infinite_2s]"></div>
-        
-        {/* Centre Fixe */}
+
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-primary/30 rounded-full z-0 flex items-center justify-center">
              <div className="w-[280px] h-[1px] bg-primary/20 absolute"></div>
              <div className="h-[280px] w-[1px] bg-primary/20 absolute"></div>
         </div>
 
-        {/* CONTENU AVEC CLASSES D'ANIMATION */}
         <h2 className="relative z-10 font-display text-[12vw] leading-[0.85] text-white mb-8 mix-blend-screen">
-          {/* Ligne 1 : Vient de la gauche */}
           <span className="cta-text-1 inline-block">YOUR RACE.</span><br/>
-          {/* Ligne 2 : Vient de la droite (avec outline rouge) */}
           <span className="cta-text-2 inline-block text-transparent" style={{ WebkitTextStroke: '2px #FF3300' }}>
             YOUR PACE.
           </span>
         </h2>
-        
-        <button className="group relative z-10 mt-4 px-14 py-6 bg-transparent border border-primary text-primary font-display text-xl uppercase tracking-widest overflow-hidden transition-all duration-300 hover:text-white hover:border-transparent">
-          <span className="relative z-10">Rejoindre la Team</span>
+
+        <TransitionLink href="/contact" className="group relative z-10 mt-4 inline-block px-14 py-6 bg-transparent border border-primary text-primary font-display text-xl uppercase tracking-widest overflow-hidden transition-all duration-300 hover:text-white hover:border-transparent">
+          <span className="relative z-10">Commencer la préparation</span>
           <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
-        </button>
+        </TransitionLink>
 
       </section>
 

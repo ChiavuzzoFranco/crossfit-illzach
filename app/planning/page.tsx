@@ -1,63 +1,71 @@
 'use client';
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { Lock, Dumbbell } from "lucide-react";
 import TransitionLink from "../../components/TransitionLink";
+import AccessBadge3D from "@/components/AccessBadge3D";
 
 // --- DONNÉES DU PLANNING (facile à modifier) ---
 const SCHEDULE: Record<string, { time: string; type: string }[]> = {
   LUNDI: [
-    { time: "07:00", type: "WOD" },
-    { time: "09:30", type: "WOD" },
-    { time: "12:15", type: "WOD" },
-    { time: "17:00", type: "OPEN GYM" },
-    { time: "18:00", type: "WOD" },
+    { time: "11:00", type: "WOD" },
+    { time: "12:15", type: "HIIT" },
+    { time: "17:00", type: "HYROX" },
+    { time: "18:15", type: "WEIGHTLIFTING" },
+    { time: "19:30", type: "WOD" },
   ],
   MARDI: [
-    { time: "07:00", type: "WOD" },
-    { time: "09:30", type: "WOD" },
+    { time: "11:00", type: "HYROX" },
     { time: "12:15", type: "WOD" },
-    { time: "17:00", type: "OPEN GYM" },
-    { time: "18:00", type: "WOD" },
+    { time: "17:00", type: "WOD" },
+    { time: "18:15", type: "GYM" },
+    { time: "19:30", type: "FBB" },
   ],
   MERCREDI: [
-    { time: "07:00", type: "WOD" },
-    { time: "09:30", type: "WOD" },
+    { time: "11:00", type: "GYM" },
     { time: "12:15", type: "WOD" },
-    { time: "17:00", type: "OPEN GYM" },
-    { time: "18:00", type: "WOD" },
+    { time: "17:00", type: "WOD" },
+    { time: "18:15", type: "HYROX" },
+    { time: "19:30", type: "WOD TEAM" },
   ],
   JEUDI: [
-    { time: "07:00", type: "WOD" },
-    { time: "09:30", type: "WOD" },
-    { time: "12:15", type: "WOD" },
-    { time: "17:00", type: "OPEN GYM" },
-    { time: "18:00", type: "WOD" },
+    { time: "11:00", type: "WOD" },
+    { time: "12:15", type: "HYROX" },
+    { time: "17:00", type: "HYROX" },
+    { time: "18:15", type: "WOD" },
+    { time: "19:30", type: "WEIGHTLIFTING" },
   ],
   VENDREDI: [
-    { time: "07:00", type: "WOD" },
-    { time: "09:30", type: "WOD" },
+    { time: "11:00", type: "HIIT" },
     { time: "12:15", type: "WOD" },
-    { time: "17:00", type: "OPEN GYM" },
-    { time: "18:00", type: "WOD" },
+    { time: "17:00", type: "WOD" },
+    { time: "18:15", type: "WOD" },
+    { time: "19:30", type: "HYROX" },
   ],
   SAMEDI: [
-    { time: "07:00", type: "WOD" },
-    { time: "09:30", type: "WOD" },
-    { time: "12:15", type: "WOD" },
-    { time: "17:00", type: "OPEN GYM" },
-    { time: "18:00", type: "WOD" },
+    { time: "09:00", type: "WOD TEAM" },
+    { time: "10:00", type: "WOD TEAM" },
+    { time: "11:00", type: "HYROX TEAM" },
   ],
 };
 
 const DAYS = Object.keys(SCHEDULE);
 
 export default function PlanningPage() {
+  const badgeSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.fromTo(".planning-row",
       { x: -50, opacity: 0 },
       { x: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power2.out", delay: 0.5 }
     );
+
+    if (badgeSectionRef.current) {
+      gsap.fromTo(badgeSectionRef.current,
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: "power2.out", delay: 1 }
+      );
+    }
   }, []);
 
   return (
@@ -153,6 +161,48 @@ export default function PlanningPage() {
             </div>
           );
         })}
+      </div>
+
+      {/* SECTION ACCÈS LIBRE */}
+      <div ref={badgeSectionRef} className="mt-24 pt-12 border-t border-white/20">
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+
+          {/* Badge 3D */}
+          <div className="w-full md:w-1/2 shrink-0">
+            <AccessBadge3D />
+          </div>
+
+          {/* Texte */}
+          <div className="w-full md:w-1/2">
+            <p className="font-display text-lg text-gray-500 tracking-widest mb-1">EN DEHORS DES COURS</p>
+            <h2 className="font-display text-5xl md:text-6xl text-primary mb-6">ACCÈS LIBRE</h2>
+            <p className="font-body text-gray-400 text-lg leading-relaxed mb-8">
+              Pas de cours à votre horaire ? Avec votre badge, accédez à la Box{" "}
+              <span className="text-white font-bold">7j/7 de 6h à 22h</span>.
+              Entraînez-vous en autonomie, suivez votre propre programme ou rattrapez un WOD manqué.
+            </p>
+
+            {/* Badges icônes */}
+            <div className="flex flex-wrap gap-4 mb-8">
+              <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-5 py-2.5">
+                <Lock className="w-4 h-4 text-primary" />
+                <span className="font-body text-sm text-gray-300">Accès Sécurisé</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-5 py-2.5">
+                <Dumbbell className="w-4 h-4 text-primary" />
+                <span className="font-body text-sm text-gray-300">Équipement Complet</span>
+              </div>
+            </div>
+
+            {/* Bouton */}
+            <TransitionLink
+              href="/tarifs"
+              className="inline-block bg-primary text-white font-display text-lg px-10 py-4 uppercase tracking-wider hover:bg-white hover:text-black transition-colors"
+            >
+              Voir les abonnements
+            </TransitionLink>
+          </div>
+        </div>
       </div>
 
       {/* CTA CONTACT */}

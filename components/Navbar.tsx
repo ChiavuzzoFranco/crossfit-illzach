@@ -12,10 +12,10 @@ export default function Navbar() {
 
   const links = [
    { name: 'ACCUEIL', href: '/' },
-  { name: 'LA BOX', href: '/concept' },    // Nouvelle page (Lieu, Coachs, Free Access)
-  { name: 'ACTIVITÉS', href: '/activites' }, // Ancienne page (WOD, Gym, Haltero...)
+  // { name: 'LA BOX', href: '/concept' },    // Désactivé temporairement
+  // { name: 'ACTIVITÉS', href: '/activites' }, // Désactivé temporairement
   { name: 'PLANNING', href: '/planning' },
-  { name: 'HYROX', href: '/hyrox' },
+  // { name: 'HYROX', href: '/hyrox' },  // Désactivé temporairement
   { name: 'TARIFS', href: '/tarifs' },
   { name: 'CONTACT', href: '/contact' },
   ];
