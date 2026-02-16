@@ -112,7 +112,7 @@ export default function TarifsPage() {
       tagline: "ALL ACCESS",
       priceMonthly: 110,
       priceAnnual: 89,
-      features: ["WODs Illimités", "Hyrox Illimité", "Open Gym 7j/7", "Badge Free Access Inclus", "Suivi Nutrition"],
+      features: ["WODs Illimités", "Hyrox Illimité", "Open Gym 7j/7", "Badge Free Access Inclus"],
       cta: "DEVENIR MEMBRE", 
       popular: true
     },
