@@ -7,7 +7,7 @@ const anton = Anton({ weight: "400", subsets: ["latin"], variable: "--font-anton
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
 
 export const metadata: Metadata = {
-  title: "CrossFit Illzach | Forge Your Legacy",
+  title: "CrossFit Illzach",
   description: "La référence du CrossFit et Hyrox en Alsace.",
 };
 
