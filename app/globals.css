@@ -9,6 +9,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Lenis gère le défilement : on coupe le smooth natif pendant qu'il est actif */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -83,3 +88,12 @@ body {
 }
 .hx-in { animation: hx-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) both; }
 @media (prefers-reduced-motion: reduce) { .hx-in { animation: none; } }
+
+/* --- Story : préchargeur --- */
+@keyframes story-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes story-out { to { opacity: 0; visibility: hidden; } }
+.story-preloader { animation: story-out 0.9s ease 2.1s forwards; }
+.story-preloader-bar { animation: story-bar 1.9s cubic-bezier(0.65, 0, 0.35, 1) forwards; transform: scaleX(0); }
+@media (prefers-reduced-motion: reduce) {
+  .story-preloader { animation-delay: 0.3s; animation-duration: 0.3s; }
+}

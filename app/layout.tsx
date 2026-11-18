@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Anton, Manrope } from "next/font/google";
+import { Anton, Manrope, Permanent_Marker } from "next/font/google";
 import "./globals.css";
 import ClientShell from "../components/ClientShell";
 
 const anton = Anton({ weight: "400", subsets: ["latin"], variable: "--font-anton" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
+const brush = Permanent_Marker({ weight: "400", subsets: ["latin"], variable: "--font-brush" });
 
 export const metadata: Metadata = {
   title: "CrossFit Illzach",
@@ -21,7 +22,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body
-        className={`${anton.variable} ${manrope.variable} bg-bg text-offwhite overflow-x-hidden`}
+        className={`${anton.variable} ${manrope.variable} ${brush.variable} bg-bg text-offwhite overflow-x-hidden`}
         suppressHydrationWarning={true}
       >
         <ClientShell>

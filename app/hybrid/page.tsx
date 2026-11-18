@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic';
 import TransitionLink from '@/components/TransitionLink';
 import { hybridStore, STATION_COUNT, RUN_PART, raceKm } from '@/components/hybrid/store';
 import { SCHEDULE, DAYS } from '@/lib/schedule';
+import { setVisitor } from '@/components/story/visitor';
+import { slotKey } from '@/components/story/WeekChapter';
 
 const HybridScene = dynamic(() => import('@/components/hybrid/HybridScene'), { ssr: false });
 
@@ -435,18 +437,19 @@ export default function HybridPage() {
               <p className="font-body text-[10px] uppercase tracking-[0.35em] text-gray-400 mb-4">Les créneaux</p>
               <h2 className="font-display text-5xl md:text-7xl uppercase leading-none">S&apos;entraîner</h2>
             </div>
-            <TransitionLink href="/planning" className="font-display uppercase tracking-widest text-sm text-gray-400 hover:text-primary transition-colors">
+            <TransitionLink href="/#planning" className="font-display uppercase tracking-widest text-sm text-gray-400 hover:text-primary transition-colors">
               Planning complet →
             </TransitionLink>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-l border-t border-white/10">
             {hybridSlots.map((s) => {
-              const creneau = `${s.day} ${s.time} - ${s.type}`;
+              const creneau = slotKey(s.day, s.time, s.type);
               return (
                 <TransitionLink
                   key={creneau}
-                  href={`/contact?creneau=${encodeURIComponent(creneau)}`}
+                  href="/#essai"
+                  onClick={() => setVisitor({ slot: creneau })}
                   className="group border-r border-b border-white/10 hover:bg-white/[0.03] transition-colors p-6 flex items-center justify-between"
                 >
                   <div>
@@ -468,7 +471,7 @@ export default function HybridPage() {
           <span className="block text-transparent" style={{ WebkitTextStroke: '2px #FF2E00' }}>Your pace.</span>
         </h2>
         <TransitionLink
-          href="/contact"
+          href="/#essai"
           className="group relative inline-block w-full md:w-auto px-14 py-6 border border-primary text-primary font-display text-lg md:text-xl uppercase tracking-widest overflow-hidden transition-colors duration-300 hover:text-white"
         >
           <span className="relative z-10">Commencer la préparation</span>
