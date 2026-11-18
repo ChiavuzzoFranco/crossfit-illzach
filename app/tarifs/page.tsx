@@ -118,8 +118,8 @@ export default function TarifsPage() {
     },
     {
       id: 3,
-      name: "FORCES",
-      tagline: "POLICE / POMPIER / MILITAIRE",
+      name: "HÉROS",
+      tagline: "FORCES DE L'ORDRE / PERSONNEL SOIGNANT",
       priceMonthly: 75,
       priceAnnual: 65,
       features: ["Accès Illimité", "Hyrox Inclus", "Badge Free Access Inclus", "Justificatif Req."],
@@ -234,7 +234,7 @@ export default function TarifsPage() {
                   {/* HEADER CARD */}
                   <div className="mb-10 min-h-[90px]">
                      {plan.popular && <div className="inline-block text-primary text-[10px] uppercase tracking-widest mb-3 border border-primary/30 px-3 py-1 rounded-full">Best Seller</div>}
-                     {plan.special && <div className="inline-block text-gray-400 text-[10px] uppercase tracking-widest mb-3 border border-white/20 px-3 py-1 rounded-full">Service Public</div>}
+                     {plan.special && <div className="inline-block text-gray-400 text-[10px] uppercase tracking-widest mb-3 border border-white/20 px-3 py-1 rounded-full">Héros du quotidien</div>}
                      
                      <h3 className="font-display text-3xl mb-1 text-white tracking-wide">
                        <ScrambleText text={plan.name} delay={cardDelay} trigger={isLoaded} />

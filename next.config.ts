@@ -2,6 +2,10 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [{ source: '/hyrox', destination: '/hybrid', permanent: true }];
+  },
+
   // On ignore les erreurs TypeScript pour le build
   typescript: {
     ignoreBuildErrors: true,

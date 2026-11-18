@@ -10,51 +10,7 @@ const AccessBadge3D = dynamic(() => import("@/components/AccessBadge3D"), {
 });
 
 
-// --- DONNÉES DU PLANNING (facile à modifier) ---
-const SCHEDULE: Record<string, { time: string; type: string }[]> = {
-  LUNDI: [
-    { time: "11:00", type: "WOD" },
-    { time: "12:15", type: "HIIT" },
-    { time: "17:00", type: "HYROX" },
-    { time: "18:15", type: "WEIGHTLIFTING" },
-    { time: "19:30", type: "WOD" },
-  ],
-  MARDI: [
-    { time: "11:00", type: "HYROX" },
-    { time: "12:15", type: "WOD" },
-    { time: "17:00", type: "WOD" },
-    { time: "18:15", type: "GYM" },
-    { time: "19:30", type: "FBB" },
-  ],
-  MERCREDI: [
-    { time: "11:00", type: "GYM" },
-    { time: "12:15", type: "WOD" },
-    { time: "17:00", type: "WOD" },
-    { time: "18:15", type: "HYROX" },
-    { time: "19:30", type: "WOD TEAM" },
-  ],
-  JEUDI: [
-    { time: "11:00", type: "WOD" },
-    { time: "12:15", type: "HYROX" },
-    { time: "17:00", type: "HYROX" },
-    { time: "18:15", type: "WOD" },
-    { time: "19:30", type: "WEIGHTLIFTING" },
-  ],
-  VENDREDI: [
-    { time: "11:00", type: "HIIT" },
-    { time: "12:15", type: "WOD" },
-    { time: "17:00", type: "WOD" },
-    { time: "18:15", type: "WOD" },
-    { time: "19:30", type: "HYROX" },
-  ],
-  SAMEDI: [
-    { time: "09:00", type: "WOD TEAM" },
-    { time: "10:00", type: "WOD TEAM" },
-    { time: "11:00", type: "HYROX TEAM" },
-  ],
-};
-
-const DAYS = Object.keys(SCHEDULE);
+import { SCHEDULE, DAYS } from "@/lib/schedule";
 
 export default function PlanningPage() {
   const badgeSectionRef = useRef<HTMLDivElement>(null);

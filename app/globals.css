@@ -75,3 +75,11 @@ body {
   opacity: 1;
   transform: translateY(0) translateX(0) scale(1);
 }
+
+/* --- Page Hybrid : entrée des fiches --- */
+@keyframes hx-in {
+  from { opacity: 0; transform: translateY(16px); filter: blur(6px); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.hx-in { animation: hx-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) both; }
+@media (prefers-reduced-motion: reduce) { .hx-in { animation: none; } }

@@ -14,7 +14,7 @@ export default function Navbar() {
   // { name: 'LA BOX', href: '/concept' },
   // { name: 'ACTIVITÉS', href: '/activites' },
   { name: 'PLANNING', href: '/planning' },
-  // { name: 'HYROX', href: '/hyrox' },  // Désactivé temporairement
+  { name: 'HYROX / ATHX', href: '/hybrid' },
   { name: 'TARIFS', href: '/tarifs' },
   { name: 'CONTACT', href: '/contact' },
   ];
