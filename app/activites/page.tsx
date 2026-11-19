@@ -6,6 +6,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TransitionLink from "../../components/TransitionLink"; 
 import Image from "next/image";
 import { ArrowUpRight, Clock, Target, Zap, X } from "lucide-react";
+import dynamic from "next/dynamic";
+import JungleLeaves from "../../components/jungle/JungleLeaves";
+import { Splash, Sticker, TORN, tilt } from "../../components/jungle/ui";
+
+const JungleBackdrop = dynamic(() => import("../../components/jungle/JungleBackdrop"), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -257,34 +262,41 @@ export default function Concept() {
   };
 
   return (
-    <main ref={containerRef} className="min-h-screen bg-[#050505] text-white pt-32 pb-20 relative">
+    <main ref={containerRef} className="min-h-screen text-white pt-32 pb-20 relative overflow-x-clip">
+      {/* Jungle en haut de page, fondue vers le bas */}
+      <JungleBackdrop variant="frame" className="absolute inset-x-0 top-0 h-[90svh]" />
+      <div className="absolute inset-x-0 top-[55svh] h-[35svh] bg-gradient-to-b from-transparent to-bg pointer-events-none" />
       
       {/* --- PAGE PRINCIPALE --- */}
-      <div className="px-6 md:px-12 mb-20 md:mb-32">
-        <h1 className="font-display text-[12vw] leading-[0.8] mb-8 text-white uppercase">
+      <div className="relative px-6 md:px-12 mb-20 md:mb-32">
+        <p className="hero-reveal relative z-10 font-brush text-primary text-3xl md:text-5xl -rotate-3 mb-[2.5vw]">La façon de la tribu</p>
+        <h1 className="font-display text-[16vw] md:text-[12vw] leading-[0.8] mb-8 text-white uppercase [text-shadow:0_6px_30px_rgba(0,0,0,0.8)]">
           <span className="hero-reveal block">Notre</span>
           <span className="hero-reveal block text-primary">Méthode</span>
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <p className="hero-reveal font-body text-xl text-gray-400 leading-relaxed">
+            <p className="hero-reveal font-body text-xl text-gray-200 leading-relaxed">
               Le CrossFit chez nous n'est pas une compétition. C'est une méthodologie conçue pour vous rendre plus fort.
             </p>
             <div className="hero-reveal flex items-end md:justify-end">
-                <span className="text-primary font-display text-lg uppercase tracking-widest border-b border-primary pb-1">Sport Santé</span>
+                <Sticker rot={-3} tone="red" className="px-4 py-2 text-lg">Sport Santé</Sticker>
             </div>
         </div>
       </div>
 
       {/* SEANCE TYPE */}
-      <section className="timeline-section px-6 md:px-12 mb-32 md:mb-48">
-         <div className="border-t border-white/20 pt-12">
-            <h2 className="font-display text-2xl md:text-4xl mb-16 text-white uppercase">UNE SÉANCE TYPE (1H)</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="timeline-section relative isolate px-6 md:px-12 mb-32 md:mb-48">
+         <JungleLeaves set="left" opacity={0.8} />
+         <div className="pt-12">
+            <p className="font-brush text-primary text-2xl md:text-3xl -rotate-2 mb-3">Une heure ensemble</p>
+            <h2 className="font-display text-3xl md:text-5xl mb-16 text-white uppercase">UNE SÉANCE TYPE (1H)</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-14">
                {[{step:"01", title:"BRIEFING", txt:"Explication des objectifs."}, {step:"02", title:"SKILL", txt:"Apprentissage technique."}, {step:"03", title:"LE W.O.D", txt:"L'effort du jour."}].map((s, i) => (
-                   <div key={i} className="step-card opacity-0 group relative p-8 border border-white/10 hover:border-primary transition-colors bg-[#0a0a0a]">
-                      <span className="font-display text-6xl text-white/10 absolute top-4 right-6 group-hover:text-primary/20 transition-colors">{s.step}</span>
-                      <h3 className="font-display text-2xl text-white group-hover:text-primary transition-colors mb-4">{s.title}</h3>
-                      <p className="font-body text-gray-400 text-sm leading-relaxed">{s.txt}</p>
+                   <div key={i} className={`step-card opacity-0 group relative isolate px-10 py-12 text-center ${i === 1 ? 'md:mt-10' : ''}`}>
+                      <Splash variant={i + 1} className={`absolute inset-0 w-full h-full ${['text-blood', 'text-ember', 'text-primary'][i]} -z-10 drop-shadow-[8px_10px_0_rgba(0,0,0,0.55)] transition-transform duration-500 group-hover:scale-105`} style={{ transform: `rotate(${tilt(i, 8)}deg)` }} />
+                      <Sticker rot={tilt(i + 4, 5)} tone="black" className="px-3 py-1 text-xl mb-4">{s.step}</Sticker>
+                      <h3 className="font-display text-3xl text-white mb-3">{s.title}</h3>
+                      <p className="font-body text-white/90 text-sm leading-relaxed">{s.txt}</p>
                    </div>
                ))}
             </div>
@@ -292,34 +304,35 @@ export default function Concept() {
       </section>
 
       {/* LISTE */}
-      <section className="list-container px-6 md:px-12 mb-32 max-w-[1600px] mx-auto">
+      <section className="list-container relative isolate px-6 md:px-12 mb-32 max-w-[1600px] mx-auto">
+        <JungleLeaves set="right" opacity={0.75} />
         <div className="mb-12">
-            <h2 className="font-display text-sm text-gray-400 uppercase tracking-widest mb-2">Nos Programmes</h2>
-            <p className="font-body text-2xl text-white">Quelle discipline est faite pour vous ?</p>
+            <h2 className="font-brush text-primary text-3xl md:text-4xl -rotate-2 mb-4">Nos programmes</h2>
+            <p className="font-display uppercase text-3xl md:text-5xl text-white">Quelle discipline est faite pour vous ?</p>
         </div>
-        <div className="flex flex-col border-t border-white/10">
+        <div className="flex flex-col border-t-2 border-blood/50">
           {CLASSES.map((item, index) => (
             <div key={item.id} onClick={() => setSelectedClass(item)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onMouseMove={handleMouseMove}
-              className="list-item opacity-0 group relative py-8 md:py-12 border-b border-white/10 cursor-pointer interactive flex flex-col md:flex-row items-start md:items-center justify-between transition-all duration-300 overflow-hidden"
+              className="list-item opacity-0 group relative py-8 md:py-12 border-b-2 border-blood/50 cursor-pointer interactive flex flex-col md:flex-row items-start md:items-center justify-between transition-all duration-300 overflow-hidden"
             >
                <div className="hover-reveal-img absolute top-0 left-0 w-[450px] h-[300px] z-10 pointer-events-none opacity-0 scale-50 hidden md:block">
-                  <div className="relative w-full h-full overflow-hidden shadow-2xl rounded-lg border border-white/10">
+                  <div className="relative w-full h-full overflow-hidden drop-shadow-[10px_12px_0_rgba(0,0,0,0.6)]" style={{ clipPath: TORN }}>
                      <Image src={item.cover} alt={item.title} fill className="object-cover" />
                   </div>
                </div>
-               <div className="w-full h-[200px] relative mb-6 block md:hidden rounded-lg overflow-hidden border border-white/10">
+               <div className="w-full h-[200px] relative mb-6 block md:hidden overflow-hidden" style={{ clipPath: TORN }}>
                    <Image src={item.cover} alt={item.title} fill className="object-cover" />
                </div>
                <div className="relative z-20 w-full md:w-1/3 pointer-events-none">
                  <div className="flex items-center">
-                    <span className="text-primary font-display text-sm md:text-xl mr-4">0{index + 1}</span>
+                    <span className="text-primary font-brush text-xl md:text-3xl mr-4 -rotate-6">0{index + 1}</span>
                     <h2 className="font-display text-3xl md:text-6xl uppercase text-white transition-colors duration-300 group-hover:text-gray-300 md:group-hover:text-white">{item.title}</h2>
                  </div>
                </div>
                <div className="relative z-20 w-full md:w-1/3 text-left md:text-right pointer-events-none mt-4 md:mt-0 md:pl-0">
                   <p className="font-body text-gray-400 text-xs md:text-sm mb-3 md:mb-2">{item.subtitle}</p>
                   <div className="flex justify-start md:justify-end gap-2">
-                    {item.tags.map((tag:string) => <span key={tag} className="border border-white/20 px-2 py-1 text-[10px] uppercase tracking-wide text-gray-400 group-hover:text-white group-hover:border-white transition-colors">{tag}</span>)}
+                    {item.tags.map((tag:string, k:number) => <Sticker key={tag} rot={tilt(index * 3 + k, 3)} tone="black" className="px-2 py-1 text-[10px] group-hover:bg-primary transition-colors">{tag}</Sticker>)}
                   </div>
                </div>
             </div>
@@ -329,8 +342,8 @@ export default function Concept() {
 
       {/* CTA FOOTER */}
       <section className="px-6 md:px-12 text-center pb-32">
-         <TransitionLink href="/contact" className="bg-primary text-white px-8 py-4 font-display uppercase tracking-widest hover:bg-white hover:text-black transition-colors">
-           Réserver ma séance d'essai
+         <TransitionLink href="/contact" className="inline-block">
+           <Sticker rot={-2} tone="red" className="px-8 py-4 text-lg md:text-xl">Réserver ma séance d&apos;essai →</Sticker>
          </TransitionLink>
       </section>
 
@@ -370,10 +383,8 @@ export default function Concept() {
                             <FadeInSection>
                                 <h1 className="font-display text-4xl md:text-7xl uppercase text-white mb-4 leading-none">{selectedClass.subtitle}</h1>
                                 <div className="flex flex-wrap gap-4">
-                                    {selectedClass.tags.map((tag:string) => (
-                                        <span key={tag} className="bg-primary text-white px-3 py-1 text-xs uppercase tracking-widest font-bold">
-                                            {tag}
-                                        </span>
+                                    {selectedClass.tags.map((tag:string, k:number) => (
+                                        <Sticker key={tag} rot={tilt(k, 4)} tone="red" className="px-3 py-1 text-xs">{tag}</Sticker>
                                     ))}
                                 </div>
                             </FadeInSection>
@@ -393,18 +404,18 @@ export default function Concept() {
                                         {selectedClass.longDescription}
                                     </p>
                                 </div>
-                                <div className="space-y-8 bg-white/[0.03] p-8 border border-white/10 rounded-lg backdrop-blur-sm">
+                                <div className="space-y-8 bg-[#f3eee6] text-bg p-8 md:p-10 -rotate-1 drop-shadow-[10px_12px_0_rgba(0,0,0,0.6)]" style={{ clipPath: TORN }}>
                                     <div>
-                                        <h4 className="font-display text-xs text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                            <Target size={14}/> FOCUS
+                                        <h4 className="font-display text-xs text-bg/60 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                            <Target size={14} className="text-primary"/> FOCUS
                                         </h4>
-                                        <p className="text-white text-lg">{selectedClass.focus}</p>
+                                        <p className="font-brush text-xl">{selectedClass.focus}</p>
                                     </div>
                                     <div>
-                                        <h4 className="font-display text-xs text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                            <Clock size={14}/> DÉROULEMENT
+                                        <h4 className="font-display text-xs text-bg/60 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                            <Clock size={14} className="text-primary"/> DÉROULEMENT
                                         </h4>
-                                        <p className="text-white text-lg">{selectedClass.structure}</p>
+                                        <p className="font-brush text-xl">{selectedClass.structure}</p>
                                     </div>
                                 </div>
                             </div>
@@ -412,13 +423,14 @@ export default function Concept() {
 
                         {/* 3. GALERIE ÉDITORIALE */}
                         <FadeInSection>
+                            <p className="font-brush text-primary text-2xl md:text-3xl -rotate-2 text-center">Plonge dans la jungle</p>
                             <h3 className="font-display text-3xl md:text-5xl mb-12 text-center">IMMERSION</h3>
                         </FadeInSection>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 mb-20">
                             {/* Bloc 1 */}
                             <FadeInSection delay={0.1}>
-                                <div className="relative h-[300px] md:h-[500px] w-full rounded-lg overflow-hidden border border-white/10 group mb-6">
+                                <div className="relative h-[300px] md:h-[500px] w-full overflow-hidden group mb-6" style={{ clipPath: TORN }}>
                                     <Image src={selectedClass.images[0]} alt="Gallery 1" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                                 </div>
                                 <div className="p-6 border-l border-primary/50 pl-6">
@@ -430,7 +442,7 @@ export default function Concept() {
                             {/* Bloc 2 */}
                             <FadeInSection delay={0.3}>
                                 <div className="md:mt-20"> {/* Décalage esthétique */}
-                                    <div className="relative h-[300px] md:h-[500px] w-full rounded-lg overflow-hidden border border-white/10 group mb-6">
+                                    <div className="relative h-[300px] md:h-[500px] w-full overflow-hidden group mb-6" style={{ clipPath: TORN }}>
                                         <Image src={selectedClass.images[1]} alt="Gallery 2" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                                     </div>
                                     <div className="p-6 border-l border-primary/50 pl-6">
@@ -445,7 +457,7 @@ export default function Concept() {
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-24">
                              {selectedClass.images.slice(2).map((img:string, idx:number) => (
                                 <FadeInSection key={idx} delay={0.1 * idx}>
-                                    <div className="relative h-[150px] md:h-[250px] w-full rounded-lg overflow-hidden border border-white/10 opacity-80 hover:opacity-100 transition-opacity">
+                                    <div className="relative h-[150px] md:h-[250px] w-full overflow-hidden opacity-80 hover:opacity-100 transition-opacity" style={{ clipPath: TORN }}>
                                         <Image src={img} alt="Extra" fill className="object-cover" />
                                     </div>
                                 </FadeInSection>
@@ -454,10 +466,11 @@ export default function Concept() {
 
                         {/* 5. CTA */}
                         <FadeInSection>
-                            <div className="text-center pb-20 border-t border-white/10 pt-20">
+                            <div className="text-center pb-20 pt-20">
+                                <p className="font-brush text-primary text-2xl md:text-3xl -rotate-2">La tribu t&apos;attend</p>
                                 <h3 className="font-display text-3xl md:text-5xl mb-8">PRÊT À SUER ?</h3>
-                                <TransitionLink href="/contact" className="inline-block bg-white text-black px-8 py-4 md:px-10 md:py-5 font-display text-lg md:text-xl uppercase tracking-widest hover:bg-primary hover:text-white transition-colors">
-                                    Réserver ma séance
+                                <TransitionLink href="/contact" className="inline-block">
+                                    <Sticker rot={-2} tone="white" className="px-8 py-4 text-lg md:text-xl">Réserver ma séance →</Sticker>
                                 </TransitionLink>
                             </div>
                         </FadeInSection>

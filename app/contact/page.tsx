@@ -3,6 +3,10 @@ import { useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import { CheckCircle } from "lucide-react";
+import JungleLeaves from "../../components/jungle/JungleLeaves";
+import { Splash, Stamp, Sticker, TORN } from "../../components/jungle/ui";
+
+const JungleBackdrop = dynamic(() => import("../../components/jungle/JungleBackdrop"), { ssr: false });
 
 const GymMap = dynamic(() => import("../../components/GymMap"), {
   ssr: false,
@@ -90,59 +94,67 @@ function ContactContent() {
     }
   }
 
+  // Champs « écrits à la main » sur le papier
+  const field = "w-full bg-transparent border-b-2 border-bg/25 focus:border-primary outline-none py-1.5 font-brush text-xl md:text-2xl text-bg placeholder:text-bg/25 transition-colors";
+  const lab = "font-display uppercase tracking-[0.2em] text-[11px] text-bg/55";
+
   return (
-    <div ref={containerRef} className="min-h-screen bg-[#050505] text-white pt-32 pb-12 selection:bg-primary selection:text-white">
+    <div ref={containerRef} className="relative min-h-screen text-white pt-32 pb-12 selection:bg-primary selection:text-white">
+      {/* Jungle en fond du haut de page, fondue vers le bas */}
+      <JungleBackdrop variant="frame" className="absolute inset-x-0 top-0 h-[115svh]" />
+      <div className="absolute inset-x-0 top-[80svh] h-[35svh] bg-gradient-to-b from-transparent to-bg pointer-events-none" />
 
       {/* SECTION 1 : INFOS & FORMULAIRE */}
-      <div className="px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 max-w-7xl mx-auto">
+      <div className="relative px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 mb-24 max-w-7xl mx-auto">
 
         {/* COLONNE GAUCHE : INFOS */}
-        <div className="flex flex-col justify-center">
-          <h1 className="font-display text-[12vw] leading-none text-primary mb-8 contact-reveal">HELLO.</h1>
-          <p className="font-body text-xl text-gray-400 mb-12 max-w-md contact-reveal">
+        <div className="relative flex flex-col justify-center">
+          <div className="absolute -inset-10 bg-[radial-gradient(closest-side,rgba(8,8,8,0.88),rgba(8,8,8,0.45)_60%,transparent)] -z-10" />
+          <p className="font-brush text-primary text-3xl md:text-4xl -rotate-3 contact-reveal">Une question ?</p>
+          <h1 className="font-display text-[22vw] md:text-[11vw] leading-none text-white mb-6 contact-reveal">HELLO<span className="text-primary">.</span></h1>
+          <p className="font-body text-lg md:text-xl text-gray-200 mb-10 max-w-md contact-reveal">
             Vous avez une question ? Vous voulez passer nous voir ? La porte est toujours ouverte (sauf pendant les Burpees).
           </p>
 
-          <div className="space-y-8 contact-reveal">
+          <div className="space-y-6 contact-reveal">
             <div>
-              <h3 className="font-display text-2xl mb-2 text-white">ADRESSE</h3>
-              <p className="font-body text-gray-400 leading-relaxed">
-                4 Rue de Lisbonne<br/>
-                68110 Illzach, France
-              </p>
-            </div>
-            <div>
-              <h3 className="font-display text-2xl mb-2 text-white">EMAIL</h3>
-              <a href="mailto:contact@crossfit-illzach.fr" className="font-body text-gray-400 hover:text-primary transition-colors">
-                contact@crossfit-illzach.fr
+              <h3 className="font-brush text-xl text-white -rotate-1 mb-2">Adresse</h3>
+              <a href="https://www.google.com/maps/search/?api=1&query=CrossFit%20Illzach%204%20Rue%20de%20Lisbonne%2068110%20Illzach" target="_blank" rel="noopener noreferrer" className="inline-block">
+                <Sticker rot={-2} tone="white" className="px-4 py-2 text-base md:text-lg">4 Rue de Lisbonne, 68110 Illzach ↗</Sticker>
               </a>
             </div>
             <div>
-               <h3 className="font-display text-2xl mb-2 text-white">SOCIAL</h3>
-               <div className="flex gap-4 font-body text-sm uppercase text-gray-400">
-                 <a href="https://www.instagram.com/crossfitillzach/?hl=fr" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Instagram</a>
-                 <a href="https://www.facebook.com/CrossFitIllzach/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Facebook</a>
-               </div>
+              <h3 className="font-brush text-xl text-white -rotate-1 mb-2">Email</h3>
+              <a href="mailto:contact@crossfit-illzach.fr" className="inline-block">
+                <Sticker rot={1} tone="black" className="px-4 py-2 text-base md:text-lg normal-case">contact@crossfit-illzach.fr</Sticker>
+              </a>
+            </div>
+            <div>
+              <h3 className="font-brush text-xl text-white -rotate-1 mb-2">Social</h3>
+              <div className="flex gap-4">
+                <a href="https://www.instagram.com/crossfitillzach/?hl=fr" target="_blank" rel="noopener noreferrer"><Sticker rot={-3} tone="red" className="px-4 py-2 text-sm md:text-base">Instagram</Sticker></a>
+                <a href="https://www.facebook.com/CrossFitIllzach/" target="_blank" rel="noopener noreferrer"><Sticker rot={2} tone="white" className="px-4 py-2 text-sm md:text-base">Facebook</Sticker></a>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* COLONNE DROITE : FORMULAIRE */}
-        <div className="bg-[#111] p-8 md:p-12 border border-white/10 contact-reveal self-center relative overflow-hidden group">
-          <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
-
-          <div className="relative z-10">
+        {/* COLONNE DROITE : FORMULAIRE sur papier déchiré */}
+        <div className="relative contact-reveal self-center -rotate-1">
+          <Splash variant={5} className="absolute -right-10 -top-12 w-40 h-40 text-primary -z-10" />
+          <div className="relative bg-[#f3eee6] text-bg px-6 md:px-10 pt-10 pb-9 shadow-[12px_14px_0_rgba(0,0,0,0.6)]" style={{ clipPath: TORN }}>
+            <Stamp className="absolute right-5 top-5 w-20 md:w-24 text-primary/80 rotate-12" />
             {isSuccess ? (
-              <div className="flex flex-col items-center justify-center text-center py-20 animate-fade-in">
-                <CheckCircle size={48} className="text-primary mb-6" />
-                <h2 className="font-display text-3xl mb-2 text-white">MESSAGE REÇU</h2>
-                <p className="text-gray-400 font-body">Le staff te recontacte très vite.</p>
-                <button onClick={() => setIsSuccess(false)} className="mt-8 text-xs underline decoration-primary underline-offset-4 hover:text-white text-gray-400 transition-colors">
+              <div className="flex flex-col items-start py-12">
+                <CheckCircle size={44} className="text-primary mb-5" />
+                <h2 className="font-display text-4xl md:text-5xl mb-2">MESSAGE REÇU</h2>
+                <p className="font-brush text-xl text-bg/80">Le staff te recontacte très vite.</p>
+                <button onClick={() => setIsSuccess(false)} className="mt-8 text-sm underline decoration-primary underline-offset-4 text-bg/70 hover:text-bg transition-colors">
                   Envoyer un autre message
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
 
                 <input type="hidden" name="access_key" value={ACCESS_KEY} />
                 {selectedCreneau
@@ -150,48 +162,53 @@ function ContactContent() {
                   : selectedPlan && <input type="hidden" name="subject" value={`Demande Abonnement : ${selectedPlan}`} />
                 }
 
+                <div className="pr-24">
+                  <p className="font-display uppercase text-4xl md:text-6xl leading-none">Écris-nous</p>
+                  <p className="font-brush text-primary text-2xl -rotate-1">La tribu te répond</p>
+                </div>
+
                 {selectedCreneau && (
-                   <div className="pb-4 border-b border-white/10 mb-6 flex justify-between items-end">
-                      <span className="font-display text-gray-400 text-sm tracking-widest">CRÉNEAU</span>
-                      <span className="font-display text-primary text-xl uppercase">{selectedCreneau}</span>
-                   </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className={lab}>Créneau</span>
+                    <Sticker rot={-2} tone="red" className="px-3 py-1.5 text-base">{selectedCreneau}</Sticker>
+                  </div>
                 )}
 
                 {!selectedCreneau && selectedPlan && (
-                   <div className="pb-4 border-b border-white/10 mb-6 flex justify-between items-end">
-                      <span className="font-display text-gray-400 text-sm tracking-widest">SUJET</span>
-                      <span className="font-display text-primary text-xl uppercase">{selectedPlan}</span>
-                   </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className={lab}>Sujet</span>
+                    <Sticker rot={-2} tone="red" className="px-3 py-1.5 text-base">{selectedPlan}</Sticker>
+                  </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="flex flex-col gap-2">
-                    <label className="font-display text-sm tracking-widest text-gray-400">PRÉNOM</label>
-                    <input required type="text" name="prenom" className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors w-full" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-1">
+                    <label className={lab}>Prénom</label>
+                    <input required type="text" name="prenom" placeholder="Prénom" className={field} />
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="font-display text-sm tracking-widest text-gray-400">NOM</label>
-                    <input required type="text" name="nom" className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors w-full" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="flex flex-col gap-2">
-                    <label className="font-display text-sm tracking-widest text-gray-400">EMAIL</label>
-                    <input required type="email" name="email" className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors w-full" />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="font-display text-sm tracking-widest text-gray-400">TÉLÉPHONE</label>
-                    <input required type="tel" name="telephone" className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors w-full" />
+                  <div className="flex flex-col gap-1">
+                    <label className={lab}>Nom</label>
+                    <input required type="text" name="nom" placeholder="Nom" className={field} />
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="font-display text-sm tracking-widest text-gray-400">MESSAGE</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-1">
+                    <label className={lab}>Email</label>
+                    <input required type="email" name="email" placeholder="toi@mail.fr" className={field} />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className={lab}>Téléphone</label>
+                    <input required type="tel" name="telephone" placeholder="06…" className={field} />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className={lab}>Message</label>
                   <textarea
                     name="message"
                     rows={4}
-                    className="bg-transparent border-b border-white/20 py-2 outline-none focus:border-primary text-white transition-colors resize-none w-full"
+                    className={`${field} resize-none text-lg md:text-xl`}
                     defaultValue={selectedCreneau
                       ? `Bonjour, je souhaite réserver une séance d'essai sur le créneau suivant : ${selectedCreneau}.`
                       : selectedPlan ? `Bonjour, je suis intéressé par l'offre ${selectedPlan}.` : ""
@@ -199,11 +216,10 @@ function ContactContent() {
                   ></textarea>
                 </div>
 
-                <button
-                  disabled={isSubmitting}
-                  className="w-full bg-white text-black font-display text-xl uppercase py-4 hover:bg-primary hover:text-white transition-colors mt-8 disabled:opacity-50 disabled:cursor-wait"
-                >
-                  {isSubmitting ? 'Envoi...' : 'Envoyer'}
+                <button disabled={isSubmitting} className="group block w-full pt-2 disabled:opacity-50 disabled:cursor-wait">
+                  <Sticker rot={-1} tone="red" className="block w-full px-5 py-4 text-xl text-center group-hover:bg-bg transition-colors">
+                    {isSubmitting ? 'Envoi...' : 'Envoyer →'}
+                  </Sticker>
                 </button>
               </form>
             )}
@@ -211,21 +227,19 @@ function ContactContent() {
         </div>
       </div>
 
-      {/* SECTION 2 : LA MAP */}
-      <div className="w-full h-[60vh] md:h-[70vh] border-y border-white/10 relative map-reveal">
-         <div className="absolute top-6 left-6 md:left-12 z-10 pointer-events-none mix-blend-difference">
-            <h2 className="font-display text-4xl md:text-6xl text-white uppercase">La Zone</h2>
-            <p className="font-body text-primary text-sm tracking-widest uppercase">Z.I ILE NAPOLÉON</p>
-         </div>
-
-         <LazyMap />
-
-         <div className="absolute inset-0 pointer-events-none border-[20px] border-transparent md:border-[#050505]">
-            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary"></div>
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary"></div>
-            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary"></div>
-            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary"></div>
-         </div>
+      {/* SECTION 2 : LA MAP, encadrée par la jungle */}
+      <div className="relative isolate px-4 md:px-12 py-10 map-reveal">
+        <JungleLeaves set="corners" />
+        <div className="relative max-w-7xl mx-auto">
+          <div className="mb-6">
+            <p className="font-brush text-primary text-3xl md:text-4xl -rotate-2">Le camp de la tribu</p>
+            <h2 className="font-display text-5xl md:text-7xl text-white uppercase leading-none">La Zone</h2>
+            <p className="font-body text-gray-300 text-sm tracking-widest uppercase mt-1">Z.I ILE NAPOLÉON</p>
+          </div>
+          <div className="relative w-full h-[60vh] md:h-[70vh] shadow-[12px_14px_0_rgba(0,0,0,0.6)]" style={{ clipPath: TORN }}>
+            <LazyMap />
+          </div>
+        </div>
       </div>
     </div>
   );

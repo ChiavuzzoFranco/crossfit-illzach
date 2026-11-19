@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useRef, useState } from 'react';
+import { Suspense, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import {
   Environment,
@@ -12,6 +12,7 @@ import { EffectComposer, Bloom, Noise, Vignette, ChromaticAberration } from '@re
 import { BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
 import { hybridStore, STATION_COUNT, stationU } from './store';
+import { Foliage, Gorilla, RedGlow, Splats, prng, smooth as jsmooth, type LeafPlacement } from '../jungle/foliage';
 
 const RED = new THREE.Color('#FF2E00');
 const FONT = '/fonts/Anton-Regular.ttf';
@@ -49,6 +50,43 @@ function frameAt(t: number) {
   const side = new THREE.Vector3().crossVectors(WORLD_UP, tan).normalize();
   const up = new THREE.Vector3().crossVectors(tan, side).normalize();
   return { p, tan, side, up };
+}
+
+// Feuillage de la jungle le long de la piste : sur les bords, et quelques palmes au-dessus
+function trackJungle(count: number): LeafPlacement[] {
+  const r = prng(31);
+  const out: LeafPlacement[] = [];
+  const m = new THREE.Matrix4();
+  for (let i = 0; i < count; i++) {
+    const t = r();
+    const { p, tan, side, up } = frameAt(t);
+    const canopy = r() < 0.1;
+    const sign = r() < 0.5 ? -1 : 1;
+    let pos: THREE.Vector3;
+    let dir: THREE.Vector3;
+    if (canopy) {
+      // au-dessus de la piste, pointe vers le bas : effet tunnel
+      pos = p.clone().addScaledVector(side, sign * (1.0 + r() * 1.6)).addScaledVector(up, 4.4 + r() * 1.4);
+      dir = up.clone().multiplyScalar(-0.75).addScaledVector(side, -sign * 0.45).normalize();
+    } else {
+      // sur les bords, du sol jusqu'au-dessus des yeux, pointe vers l'extérieur et le haut
+      // côté intérieur de la boucle : bande étroite (la clairière des monolithes reste dégagée)
+      const inward = side.clone().multiplyScalar(sign).dot(new THREE.Vector3(-p.x, 0, -p.z)) > 0;
+      const lat = TRACK_W / 2 + 1.8 + Math.pow(r(), 0.8) * (inward ? 1.4 : 5.5);
+      pos = p.clone().addScaledVector(side, sign * lat);
+      if (Math.abs(pos.x) < 7 && Math.abs(pos.z) < 10) continue;
+      pos.y = FLOOR_Y + r() * 3.4;
+      dir = side.clone().multiplyScalar(sign * (0.35 + r() * 0.5)).addScaledVector(up, 0.8).normalize();
+    }
+    // la feuille fait face à la piste (normale ≈ tangente)
+    const z = tan.clone().sub(dir.clone().multiplyScalar(tan.dot(dir))).normalize();
+    const x = new THREE.Vector3().crossVectors(dir, z);
+    m.makeBasis(x, dir, z);
+    const rot = new THREE.Euler().setFromRotationMatrix(m);
+    rot.z += (r() - 0.5) * 0.5;
+    out.push({ pos, rot, scale: (canopy ? 0.7 : 0.6) + r() * 0.8, dir: [side.x, side.z] });
+  }
+  return out;
 }
 
 // Bande extrudée le long de la courbe, définie par deux décalages (côté, hauteur)
@@ -305,68 +343,6 @@ function Monolith({ index }: { index: number }) {
 }
 
 // ---------------------------------------------------------------------------
-// Poussière en suspension (taille plafonnée : pas d'artefacts près de la caméra)
-// ---------------------------------------------------------------------------
-function Dust({ count, still }: { count: number; still: boolean }) {
-  const { geo, mat } = useMemo(() => {
-    let seed = 1337;
-    const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
-    const pos = new Float32Array(count * 3);
-    const rnd = new Float32Array(count);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (rand() - 0.5) * 50;
-      pos[i * 3 + 1] = FLOOR_Y + 0.5 + rand() * 9;
-      pos[i * 3 + 2] = (rand() - 0.5) * 50;
-      rnd[i] = rand();
-    }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    g.setAttribute('aRnd', new THREE.BufferAttribute(rnd, 1));
-    const m = new THREE.ShaderMaterial({
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      toneMapped: false,
-      uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color('#FF5A2E') }, uDpr: { value: 1 } },
-      vertexShader: /* glsl */ `
-        uniform float uTime; uniform float uDpr;
-        attribute float aRnd;
-        varying float vA;
-        void main() {
-          vec3 p = position;
-          p.y += sin(uTime * 0.25 + aRnd * 6.283) * 0.35;
-          p.x += cos(uTime * 0.18 + aRnd * 12.0) * 0.25;
-          vec4 mv = modelViewMatrix * vec4(p, 1.0);
-          float d = max(-mv.z, 0.001);
-          gl_PointSize = clamp((2.0 + aRnd * 2.5) * uDpr * (14.0 / d), 0.0, 5.0 * uDpr);
-          // disparaît très près de la caméra et au loin
-          vA = smoothstep(1.5, 4.0, d) * (1.0 - smoothstep(30.0, 55.0, d)) * (0.35 + aRnd * 0.65);
-          gl_Position = projectionMatrix * mv;
-        }
-      `,
-      fragmentShader: /* glsl */ `
-        uniform vec3 uColor; varying float vA;
-        void main() {
-          float r = length(gl_PointCoord - 0.5);
-          float a = smoothstep(0.5, 0.0, r) * vA;
-          gl_FragColor = vec4(uColor * a * 0.9, 1.0);
-        }
-      `,
-    });
-    return { geo: g, mat: m };
-  }, [count]);
-
-  const ref = useRef<THREE.Points>(null);
-  useFrame((state) => {
-    if (!ref.current) return;
-    const u = (ref.current.material as THREE.ShaderMaterial).uniforms;
-    u.uTime.value = still ? 0 : state.clock.elapsedTime;
-    u.uDpr.value = state.gl.getPixelRatio();
-  });
-  return <points ref={ref} geometry={geo} material={mat} />;
-}
-
-// ---------------------------------------------------------------------------
 // Caméra pilotée par le scroll
 // ---------------------------------------------------------------------------
 const smooth = (a: number, b: number, x: number) => {
@@ -392,11 +368,12 @@ function CameraRig({ reducedMotion, mobile, onFx }: { reducedMotion: boolean; mo
 
     // 1. Vue d'ensemble (hero)
     const ang = 0.55 + time * 0.025 + mx * 0.18;
-    const rad = 33 - s.hero * 6;
-    tmp.hp.set(Math.sin(ang) * rad, 17 + my * 1.5 - s.hero * 3, Math.cos(ang) * rad);
+    // mobile (portrait) : plus loin et plus haut pour voir toute la boucle au-dessus du titre
+    const rad = (33 - s.hero * 6) * (mobile ? 1.55 : 1);
+    tmp.hp.set(Math.sin(ang) * rad, (17 + my * 1.5 - s.hero * 3) * (mobile ? 1.7 : 1), Math.cos(ang) * rad);
     // décale le point visé vers la gauche de l'écran → la piste se place à droite du titre
     const shift = mobile ? 0 : 9;
-    tmp.hl.set(-Math.cos(ang) * shift, -1.2 + (mobile ? 7 : 0), Math.sin(ang) * shift);
+    tmp.hl.set(-Math.cos(ang) * shift, -1.2 - (mobile ? 9 : 0), Math.sin(ang) * shift);
 
     // 2. Sur la piste
     const t = uToT(s.race);
@@ -451,6 +428,7 @@ function CameraRig({ reducedMotion, mobile, onFx }: { reducedMotion: boolean; mo
 // ---------------------------------------------------------------------------
 function Scene({ mobile, reducedMotion }: { mobile: boolean; reducedMotion: boolean }) {
   const caOffset = useMemo(() => new THREE.Vector2(0, 0), []);
+  const jungle = useMemo(() => trackJungle(mobile ? 240 : 440), [mobile]);
 
   return (
     <>
@@ -467,6 +445,20 @@ function Scene({ mobile, reducedMotion }: { mobile: boolean; reducedMotion: bool
 
       <ambientLight intensity={0.08} />
       <directionalLight position={[8, 14, 6]} intensity={0.5} />
+
+      {/* La jungle : lueur rouge au fond, gorille, feuillage le long de la piste */}
+      <RedGlow intensity={() => 0.35 + jsmooth(0, 0.2, hybridStore.athx) * 0.45} position={[0, 6, -38]} size={[140, 70]} />
+      <Suspense fallback={null}>
+        <Gorilla
+          opacity={() => {
+            const h = hybridStore.race > 0 ? 0 : 0.55 * (1 - jsmooth(0.3, 0.9, hybridStore.hero));
+            return Math.max(h, jsmooth(0.02, 0.18, hybridStore.athx) * 0.9);
+          }}
+          position={[0, FLOOR_Y + 5.4, -13.5]}
+          width={13}
+        />
+      </Suspense>
+      <Foliage layout={jungle} push={0} fog={[20, 85]} seed={11} />
 
       <Track />
       {Array.from({ length: STATION_COUNT }, (_, i) => <Gate key={i} index={i} />)}
@@ -495,7 +487,7 @@ function Scene({ mobile, reducedMotion }: { mobile: boolean; reducedMotion: bool
         )}
       </mesh>
 
-      <Dust count={mobile ? 160 : 380} still={reducedMotion} />
+      <Splats count={mobile ? 70 : 150} box={{ center: [0, 1.2, 0], size: [46, 6, 46] }} />
 
       <CameraRig
         reducedMotion={reducedMotion}

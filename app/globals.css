@@ -9,6 +9,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Lenis gère le défilement : on coupe le smooth natif pendant qu'il est actif */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

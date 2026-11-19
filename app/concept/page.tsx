@@ -4,6 +4,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Clock, Lock, Zap, MapPin, Trophy, Dumbbell } from "lucide-react";
 import dynamic from "next/dynamic";
+import TransitionLink from "../../components/TransitionLink";
+import JungleLeaves from "../../components/jungle/JungleLeaves";
+import { Splash, Sticker } from "../../components/jungle/ui";
+
+const JungleBackdrop = dynamic(() => import("../../components/jungle/JungleBackdrop"), { ssr: false });
 
 const AccessBadge3D = dynamic(() => import("../../components/AccessBadge3D"), {
   ssr: false,
@@ -81,57 +86,61 @@ export default function ConceptPage() {
   }, []);
 
   return (
-    <main ref={containerRef} className="min-h-screen bg-[#050505] text-white selection:bg-primary selection:text-white overflow-hidden">
+    <main ref={containerRef} className="min-h-screen text-white selection:bg-primary selection:text-white overflow-x-clip">
       
       {/* --- SECTION 1: HERO (LA BOX) --- */}
-      <section className="relative h-[80vh] flex flex-col justify-center px-6 md:px-12 border-b border-white/5">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
-        
-        <div className="max-w-7xl mx-auto w-full">
+      <section className="relative h-[90vh] flex flex-col justify-center px-6 md:px-12">
+        {/* Jungle en fond, fondue vers la suite */}
+        <JungleBackdrop variant="frame" gorilla className="absolute inset-0" />
+        <div className="absolute inset-x-0 bottom-0 h-[35vh] bg-gradient-to-b from-transparent to-bg pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto w-full">
+           <p className="relative z-10 font-brush text-primary text-3xl md:text-5xl -rotate-3 mb-[5vw] leading-none">Le camp de la tribu</p>
            <div className="overflow-hidden mb-4">
              {/* TITRE : LA BOX (Terme officiel CrossFit) */}
              <h1 className="font-display text-[15vw] leading-[0.8] uppercase flex flex-wrap gap-4">
                {["L", "A", "\u00A0", "B", "O", "X"].map((char, i) => (
-                 <span key={i} className="hero-title-char inline-block text-white">
+                 <span key={i} className="hero-title-char inline-block text-white [text-shadow:0_6px_30px_rgba(0,0,0,0.8)]">
                    {char}
                  </span>
                ))}
              </h1>
            </div>
            
-           <div className="hero-subtitle flex flex-col md:flex-row justify-between items-start md:items-end border-t border-white/20 pt-8 mt-8">
-             <p className="max-w-md text-gray-400 font-body text-lg leading-relaxed">
+           <div className="hero-subtitle relative flex flex-col md:flex-row justify-between items-start md:items-end pt-8 mt-8">
+             <div className="absolute -inset-8 bg-[radial-gradient(closest-side,rgba(8,8,8,0.85),rgba(8,8,8,0.4)_60%,transparent)] -z-10" />
+             <p className="max-w-md text-gray-200 font-body text-lg leading-relaxed">
                Un espace industriel brut de 800m².
                <br/>
                Ici, on ne vient pas pour se montrer, on vient pour s'entraîner.
                <span className="text-primary font-medium block mt-2">Haute intensité. Communauté. Résultats.</span>
              </p>
-             <div className="flex items-center gap-2 mt-6 md:mt-0 text-primary font-display tracking-widest uppercase">
+             <Sticker rot={-2} tone="red" className="mt-6 md:mt-0 px-4 py-2 inline-flex items-center gap-2 text-base">
                <MapPin size={18} />
                <span>4 Rue de Lisbonne, Illzach</span>
-             </div>
+             </Sticker>
            </div>
         </div>
       </section>
 
 
       {/* --- SECTION 2: OPEN GYM (BADGE 3D) --- */}
-      <section className="access-section py-32 px-6 md:px-12 relative overflow-hidden">
-        {/* Fond lumineux rouge subtil */}
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full pointer-events-none"></div>
+      <section className="access-section py-32 px-6 md:px-12 relative isolate">
+        <JungleLeaves set="right" opacity={0.85} />
 
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16 md:gap-32">
           
           {/* GAUCHE : LE BADGE 3D */}
-          <div className="w-full md:w-1/2 flex justify-center h-[500px] md:h-[600px]">
+          <div className="relative w-full md:w-1/2 flex justify-center h-[500px] md:h-[600px]">
+             <Splash variant={2} className="absolute inset-[8%] w-[84%] h-[84%] text-blood/60 -z-10" />
              <AccessBadge3D />
           </div>
 
           {/* DROITE : TEXTE */}
           <div className="w-full md:w-1/2">
-             <div className="flex items-center gap-3 mb-6">
+             <div className="flex items-center gap-3 mb-4">
                <Clock className="text-primary" />
-               <span className="font-display tracking-widest text-sm uppercase text-gray-400">Accès Badge</span>
+               <span className="font-brush text-primary text-2xl -rotate-2">Accès badge</span>
              </div>
              
              <h2 className="font-display text-5xl md:text-7xl mb-8 leading-none">
@@ -147,31 +156,35 @@ export default function ConceptPage() {
                L'équipement est à votre disposition.
              </p>
 
-             <ul className="grid grid-cols-2 gap-4 mb-10">
-               <li className="flex items-center gap-3 border border-white/10 p-4 rounded bg-white/5">
-                 <Lock size={20} className="text-primary" />
-                 <span className="text-sm font-display uppercase">Accès Sécurisé</span>
+             <ul className="flex flex-wrap gap-4 mb-10">
+               <li>
+                 <Sticker rot={-2} tone="black" className="px-4 py-2.5 inline-flex items-center gap-3 text-sm">
+                   <Lock size={18} className="text-primary" /> Accès sécurisé
+                 </Sticker>
                </li>
-               <li className="flex items-center gap-3 border border-white/10 p-4 rounded bg-white/5">
-                 <Dumbbell size={20} className="text-primary" />
-                 <span className="text-sm font-display uppercase">Zone Libre</span>
+               <li>
+                 <Sticker rot={2} tone="black" className="px-4 py-2.5 inline-flex items-center gap-3 text-sm">
+                   <Dumbbell size={18} className="text-primary" /> Zone libre
+                 </Sticker>
                </li>
              </ul>
 
-             <button className="px-8 py-4 border border-white text-white font-display uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-               Voir les abonnements
-             </button>
+             <TransitionLink href="/tarifs" className="inline-block">
+               <Sticker rot={-2} tone="white" className="px-7 py-3.5 text-base">Voir les abonnements →</Sticker>
+             </TransitionLink>
           </div>
         </div>
       </section>
 
 
       {/* --- SECTION 3: LE STAFF (COACHS) --- MASQUÉE EN ATTENDANT LES VRAIES PHOTOS */}
-      <section className="py-32 px-6 md:px-12 bg-[#080808] border-t border-white/5" style={{ display: 'none' }}>
+      <section className="relative isolate py-32 px-6 md:px-12" style={{ display: 'none' }}>
+        <JungleLeaves set="corners" opacity={0.8} />
         <div className="max-w-7xl mx-auto">
           <div className="mb-20 text-center">
+            <p className="font-brush text-primary text-3xl -rotate-2">Les chefs de la tribu</p>
             <h2 className="font-display text-5xl md:text-7xl mb-4">LE STAFF</h2>
-            <p className="text-gray-400 font-body text-lg">Certifiés. Techniques. Dévoués.</p>
+            <p className="text-gray-300 font-body text-lg">Certifiés. Techniques. Dévoués.</p>
           </div>
 
           {/* GRID COACHS */}

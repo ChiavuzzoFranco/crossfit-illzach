@@ -1,18 +1,45 @@
 'use client';
-import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import dynamic from "next/dynamic";
 import TransitionLink from "../components/TransitionLink";
+import JungleLeaves from "../components/jungle/JungleLeaves";
+import { Splash, Sticker, TORN, tilt } from "../components/jungle/ui";
+
+const JungleBackdrop = dynamic(() => import("../components/jungle/JungleBackdrop"), { ssr: false });
+
+const PILLARS = [
+  {
+    n: 1,
+    title: "SÉCURITÉ & ADAPTATION",
+    body: <>Mal au genou ? Reprise après une grossesse ? Première fois en salle ? On adapte tout. <strong className="text-white">Chaque exercice a une version pour vous.</strong> Zéro ego, zéro pression.</>,
+  },
+  {
+    n: 2,
+    title: "ZÉRO JUGEMENT",
+    body: <>Le seul regard que vous croiserez ici, c&apos;est celui de quelqu&apos;un qui vous encourage. On a des adhérents de 18 à 65 ans, des sportifs du dimanche et des compétiteurs. <strong className="text-white">Tout le monde cohabite, tout le monde progresse.</strong></>,
+  },
+  {
+    n: 3,
+    title: "L'HUMAIN AU CENTRE",
+    body: <>On connaît votre prénom, vos objectifs, et même votre café préféré. Ici, vous n&apos;êtes pas un numéro d&apos;adhérent. <strong className="text-white">Quand vous passez la porte, on sait si vous avez passé une bonne journée.</strong></>,
+  },
+];
+
+const SERVICES = [
+  { n: 1, title: "LE WOD", color: "text-blood", body: "Une heure ensemble, encadrée de A à Z. On s'échauffe, on apprend, on se dépasse — et on finit toujours avec le sourire (même après les burpees)." },
+  { n: 2, title: "GYM & HALTÉROPHILIE", color: "text-ember", body: "Envie de maîtriser les mouvements gymniques ou de soulever votre première barre ? Ces créneaux sont faits pour ça. Technique d'abord, charge ensuite. Toujours avec un coach à côté." },
+  { n: 3, title: "COACHING PERSONNALISÉ", color: "text-primary", body: "Un objectif précis ? Un retour de blessure ? Un défi sportif ? On construit ensemble un programme qui vous ressemble, avec un suivi régulier et humain." },
+];
+
+// Voile radial derrière un texte posé sur la jungle
+const Veil = ({ className = "" }: { className?: string }) => (
+  <div className={`absolute -inset-10 bg-[radial-gradient(closest-side,rgba(8,8,8,0.88),rgba(8,8,8,0.45)_60%,transparent)] -z-10 ${className}`} />
+);
 
 export default function Home() {
-  const containerRef = useRef(null);
-  const gorillaRef = useRef(null);
-  const bgTextRef = useRef(null);
-
-  // --- CSS IntersectionObserver for reveal animations (no GSAP needed) ---
+  // --- Apparitions au scroll + compteurs ---
   useEffect(() => {
-    const revealElements = document.querySelectorAll(
-      '.reveal-on-scroll, .pillar-item, .quote-block, .cta-buttons, .service-card'
-    );
+    const revealElements = document.querySelectorAll('.reveal-on-scroll, .pillar-item, .quote-block, .cta-buttons, .service-card');
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -26,7 +53,6 @@ export default function Home() {
     );
     revealElements.forEach((el) => observer.observe(el));
 
-    // Counter animation (lightweight, no ScrollTrigger)
     const counterElements = document.querySelectorAll<HTMLElement>('.counter-num');
     const counterObserver = new IntersectionObserver(
       (entries) => {
@@ -56,258 +82,175 @@ export default function Home() {
     return () => { observer.disconnect(); counterObserver.disconnect(); };
   }, []);
 
-  // --- GSAP only for hero entrance + parallax (2 scrub triggers instead of 12+) ---
-  useEffect(() => {
-    let ctx: any;
-    (async () => {
-      const { default: gsap } = await import("gsap");
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
-      ctx = gsap.context(() => {
-        // Hero entrance timeline
-        const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
-        heroTl.fromTo(gorillaRef.current,
-          { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 1.2 }
-        );
-        heroTl.fromTo(bgTextRef.current,
-          { xPercent: -20, opacity: 0 },
-          { xPercent: 0, opacity: 0.2, duration: 1.4, ease: "power2.out" },
-          "-=0.8"
-        );
-        heroTl.fromTo(".hero-title",
-          { y: 60, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, stagger: 0.15 },
-          "-=0.6"
-        );
-        heroTl.fromTo(".hero-subtitle",
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8 },
-          "-=0.3"
-        );
-
-        // Only 2 scrub-based ScrollTriggers (parallax effects that CSS can't do)
-        gsap.to(gorillaRef.current, {
-          yPercent: 30, ease: "none",
-          scrollTrigger: { trigger: containerRef.current, start: "top top", end: "bottom top", scrub: true }
-        });
-        gsap.to(bgTextRef.current, {
-          xPercent: -15, opacity: 0,
-          scrollTrigger: { trigger: containerRef.current, start: "top top", end: "50% top", scrub: 1 }
-        });
-      }, containerRef);
-    })();
-
-    return () => { if (ctx) ctx.revert(); };
-  }, []);
-
   return (
-    <main ref={containerRef} className="min-h-screen bg-bg relative overflow-hidden text-white">
+    <main className="min-h-screen bg-bg relative overflow-x-clip text-white">
 
-      {/* === 1. HERO SECTION === */}
-      <section className="h-screen w-full relative flex flex-col items-center justify-center border-b border-white/10">
+      {/* === 1. HERO : on entre dans la jungle === */}
+      <section className="relative h-[230svh]">
+        <JungleBackdrop variant="hero" gorilla splats className="sticky top-0 h-[100svh] w-full" />
+        {/* fondu vers la suite de la page (pas de coupure nette) */}
+        <div className="absolute inset-x-0 bottom-0 h-[35svh] bg-gradient-to-b from-transparent to-bg pointer-events-none z-[1]" />
 
-        {/* Texte Arrière-plan */}
-        <div ref={bgTextRef} className="absolute inset-0 flex flex-col items-center justify-center z-0 select-none opacity-20">
-          <span aria-hidden="true" className="text-[18vw] leading-[0.8] font-display text-gray-700 text-center whitespace-nowrap block">
-            ILLZACH
-          </span>
+        {/* Premier écran */}
+        <div className="absolute inset-x-0 top-0 h-[100svh] flex flex-col justify-end px-4 md:px-12 pb-14 md:pb-16 pointer-events-none">
+          <div className="relative">
+            <Veil className="-inset-x-16 -inset-y-20" />
+            <p className="font-brush text-primary text-3xl md:text-5xl -rotate-3 mb-1">Bienvenue chez</p>
+            <h1 className="font-display uppercase text-white text-[17vw] md:text-[11vw] leading-[0.82]">
+              CrossFit <span className="text-primary">Illzach</span>
+            </h1>
+            <p className="mt-6 flex items-center gap-3 font-body text-[11px] uppercase tracking-[0.3em] text-gray-300">
+              <span className="block w-10 h-px bg-primary" /> Scrolle pour entrer dans la jungle
+            </p>
+          </div>
         </div>
 
-        {/* Gorille */}
-        <div ref={gorillaRef} className="relative z-10 w-[80vw] md:w-[500px] pointer-events-none">
-           <Image
-             src="/logo.png"
-             alt="Crossfit Illzach Logo"
-             width={500}
-             height={500}
-             priority
-             sizes="(max-width: 768px) 80vw, 500px"
-             className="w-full h-auto object-contain drop-shadow-2xl"
-           />
-        </div>
-
-        {/* Slogan Hero */}
-        <div className="absolute bottom-24 z-20 text-center px-4">
-           <h2 className="font-display text-3xl md:text-6xl mb-4 text-white leading-tight overflow-hidden">
-             <span className="hero-title inline-block">PLUS QU&apos;UNE SALLE.</span><br/>
-             <span className="hero-title inline-block text-primary">UNE COMMUNAUTÉ.</span>
-           </h2>
-           <p className="hero-subtitle font-body text-gray-400 max-w-lg mx-auto text-sm md:text-base">
-             Ici, on s&apos;appelle par nos prénoms. On s&apos;encourage, on transpire, on rigole. Que vous n&apos;ayez jamais touché une barre ou que vous vous entraîniez depuis 10 ans — poussez la porte, le reste on s&apos;en occupe.
-           </p>
+        {/* Dernier écran : le gorille est révélé */}
+        <div className="absolute inset-x-0 bottom-0 h-[100svh] flex items-end justify-center px-4 pb-16 md:pb-20 text-center">
+          <div className="relative max-w-3xl">
+            <Veil />
+            <h2 className="font-display text-4xl md:text-7xl mb-5 text-white leading-[0.92]">
+              <span className="inline-block">PLUS QU&apos;UNE SALLE.</span><br />
+              <span className="inline-block text-primary">UNE COMMUNAUTÉ.</span>
+            </h2>
+            <p className="font-body text-gray-200 max-w-lg mx-auto text-sm md:text-base">
+              Ici, on s&apos;appelle par nos prénoms. On s&apos;encourage, on transpire, on rigole. Que vous n&apos;ayez jamais touché une barre ou que vous vous entraîniez depuis 10 ans — poussez la porte, le reste on s&apos;en occupe.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* === 2. NOTRE PHILOSOPHIE (CARE) === */}
-      <section className="py-32 px-6 md:px-12 relative z-10 bg-bg">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-20">
-
-          {/* Colonne gauche — Titre */}
+      <section className="py-32 px-6 md:px-12 relative z-10 isolate">
+        <JungleLeaves set="right" opacity={0.85} />
+        <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-20">
           <div className="md:col-span-5 md:sticky md:top-32 md:self-start">
-            <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6">/// Notre Philosophie</h2>
-            <h3 className="reveal-on-scroll parallax-title font-display text-5xl md:text-7xl leading-[0.9] mb-6">
-              VOTRE SANTÉ<br/>
+            <p className="reveal-on-scroll font-brush text-primary text-3xl md:text-4xl -rotate-2 mb-3">Notre philosophie</p>
+            <h3 className="reveal-on-scroll font-display text-5xl md:text-7xl leading-[0.9] mb-6">
+              VOTRE SANTÉ<br />
               <span className="text-primary">AVANT TOUT.</span>
             </h3>
-            <p className="reveal-on-scroll font-body text-gray-400 text-base leading-relaxed max-w-sm">
+            <p className="reveal-on-scroll font-body text-gray-300 text-base leading-relaxed max-w-sm">
               On ne va pas vous mentir : oui, c&apos;est intense. Mais chaque mouvement est adapté à votre niveau et à votre corps. Nos coachs sont là pour ça — pas pour vous pousser dans vos retranchements, mais pour vous accompagner vers la meilleure version de vous-même.
             </p>
             <div className="mt-10 reveal-on-scroll">
-              <TransitionLink href="/contact" className="inline-block border border-white/20 px-8 py-4 font-display text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-                Nous rencontrer →
+              <TransitionLink href="/contact" className="inline-block">
+                <Sticker rot={-2} tone="white" className="px-6 py-3 text-sm md:text-base">Nous rencontrer →</Sticker>
               </TransitionLink>
             </div>
           </div>
 
-          {/* Colonne droite — Les 3 Piliers */}
-          <div className="md:col-span-7 flex flex-col gap-0">
-
-            {/* 1. Sécurité & Adaptation */}
-            <div className="pillar-item group py-10 border-t border-white/10">
-              <div className="flex items-baseline gap-4 mb-3">
-                <span className="counter-num font-body text-xs text-primary" data-count="1">00</span>
-                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">SÉCURITÉ & ADAPTATION</h4>
+          {/* Les 3 piliers, chacun sur son éclaboussure */}
+          <div className="md:col-span-7 flex flex-col gap-14">
+            {PILLARS.map((p, i) => (
+              <div key={p.n} className="pillar-item relative flex gap-6 md:gap-8 items-start">
+                <div className="relative shrink-0 w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
+                  <Splash variant={i} className={`absolute inset-0 w-full h-full ${['text-blood', 'text-ember', 'text-primary'][i]}`} style={{ transform: `rotate(${tilt(i, 20)}deg)` }} />
+                  <span className="counter-num relative font-display text-3xl md:text-4xl text-white" data-count={p.n}>00</span>
+                </div>
+                <div>
+                  <h4 className="font-display text-3xl md:text-4xl text-white mb-3">{p.title}</h4>
+                  <p className="font-body text-gray-300 text-sm md:text-base leading-relaxed">{p.body}</p>
+                </div>
               </div>
-              <p className="font-body text-gray-400 text-sm leading-relaxed md:pl-10">
-                Mal au genou ? Reprise après une grossesse ? Première fois en salle ? On adapte tout. <strong className="text-gray-300">Chaque exercice a une version pour vous.</strong> Zéro ego, zéro pression.
-              </p>
-            </div>
-
-            {/* 2. Zéro Jugement */}
-            <div className="pillar-item group py-10 border-t border-white/10">
-              <div className="flex items-baseline gap-4 mb-3">
-                <span className="counter-num font-body text-xs text-primary" data-count="2">00</span>
-                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">ZÉRO JUGEMENT</h4>
-              </div>
-              <p className="font-body text-gray-400 text-sm leading-relaxed md:pl-10">
-                Le seul regard que vous croiserez ici, c&apos;est celui de quelqu&apos;un qui vous encourage. On a des adhérents de 18 à 65 ans, des sportifs du dimanche et des compétiteurs. <strong className="text-gray-300">Tout le monde cohabite, tout le monde progresse.</strong>
-              </p>
-            </div>
-
-            {/* 3. L'Humain au Centre */}
-            <div className="pillar-item group py-10 border-t border-white/10 border-b">
-              <div className="flex items-baseline gap-4 mb-3">
-                <span className="counter-num font-body text-xs text-primary" data-count="3">00</span>
-                <h4 className="font-display text-2xl md:text-3xl text-white group-hover:text-primary transition-colors duration-300">L&apos;HUMAIN AU CENTRE</h4>
-              </div>
-              <p className="font-body text-gray-400 text-sm leading-relaxed md:pl-10">
-                On connaît votre prénom, vos objectifs, et même votre café préféré. Ici, vous n&apos;êtes pas un numéro d&apos;adhérent. <strong className="text-gray-300">Quand vous passez la porte, on sait si vous avez passé une bonne journée.</strong>
-              </p>
-            </div>
-
+            ))}
           </div>
-
         </div>
       </section>
 
       {/* === 3. L'ESPRIT DE LA BOX (COMMUNAUTÉ) === */}
-      <section className="py-32 px-6 md:px-12 bg-[#080808] border-y border-white/10">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6">/// L&apos;Esprit de la Box</h2>
-          <h3 className="reveal-on-scroll parallax-title font-display text-4xl md:text-7xl leading-[0.9] mb-12">
-            ON VIENT POUR LE SPORT.<br/>
+      <section className="py-32 px-6 md:px-12 relative isolate">
+        <JungleLeaves set="corners" opacity={0.9} />
+        <div className="relative max-w-5xl mx-auto text-center">
+          <p className="reveal-on-scroll font-brush text-primary text-3xl md:text-4xl -rotate-2 mb-3">L&apos;esprit de la box</p>
+          <h3 className="reveal-on-scroll font-display text-4xl md:text-7xl leading-[0.9] mb-14">
+            ON VIENT POUR LE SPORT.<br />
             <span className="text-primary">ON RESTE POUR LES AMIS.</span>
           </h3>
 
-          {/* Citation */}
-          <blockquote className="quote-block border-l-2 border-primary pl-6 md:pl-8 text-left max-w-2xl mx-auto mb-12">
-            <p className="font-body text-lg md:text-xl text-gray-300 italic leading-relaxed">
-              &ldquo;Ici, celui qui termine son entraînement en dernier est celui qui reçoit le plus d&apos;encouragements.&rdquo;
-            </p>
+          {/* La phrase de la box, sur papier déchiré */}
+          <blockquote className="quote-block relative max-w-2xl mx-auto mb-14 -rotate-1">
+            <div className="bg-[#f3eee6] text-bg px-8 md:px-12 py-10 shadow-[12px_14px_0_rgba(0,0,0,0.6)]" style={{ clipPath: TORN }}>
+              <p className="font-brush text-2xl md:text-3xl leading-snug">
+                &ldquo;Ici, celui qui termine son entraînement en dernier est celui qui reçoit le plus d&apos;encouragements.&rdquo;
+              </p>
+            </div>
+            <Splash variant={5} className="absolute -right-8 -top-8 w-24 h-24 text-primary -z-10" />
           </blockquote>
 
-          <p className="reveal-on-scroll font-body text-gray-400 text-base leading-relaxed max-w-2xl mx-auto">
-            Le WOD se termine. Les barres se posent. Et là, c&apos;est le meilleur moment : on se tape dans les mains, on se charrie, on se félicite. Puis direction l&apos;espace détente pour un café (ou une protéine, chacun son truc). <strong className="text-gray-300">C&apos;est dans ces moments-là que les amitiés se créent. Et c&apos;est pour ça qu&apos;on revient.</strong>
+          <p className="reveal-on-scroll font-body text-gray-300 text-base leading-relaxed max-w-2xl mx-auto">
+            Le WOD se termine. Les barres se posent. Et là, c&apos;est le meilleur moment : on se tape dans les mains, on se charrie, on se félicite. Puis direction l&apos;espace détente pour un café (ou une protéine, chacun son truc). <strong className="text-white">C&apos;est dans ces moments-là que les amitiés se créent. Et c&apos;est pour ça qu&apos;on revient.</strong>
           </p>
         </div>
       </section>
 
       {/* === 4. NOS SERVICES === */}
-      <section className="py-32 px-6 md:px-12 bg-bg">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6 text-center">/// Nos Services</h2>
-          <h3 className="reveal-on-scroll parallax-title font-display text-4xl md:text-7xl leading-[0.9] mb-20 text-center">
-            UN ACCOMPAGNEMENT<br/><span className="text-primary">COMPLET POUR TOUS</span>
+      <section className="py-32 px-6 md:px-12 relative isolate">
+        <JungleLeaves set="left" opacity={0.8} />
+        <div className="relative max-w-7xl mx-auto">
+          <p className="reveal-on-scroll font-brush text-primary text-3xl md:text-4xl -rotate-2 mb-3 text-center">Nos services</p>
+          <h3 className="reveal-on-scroll font-display text-4xl md:text-7xl leading-[0.9] mb-20 text-center">
+            UN ACCOMPAGNEMENT<br /><span className="text-primary">COMPLET POUR TOUS</span>
           </h3>
 
-          <div className="services-grid grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            {/* Carte WOD */}
-            <div className="service-card group border border-white/10 p-8 md:p-10 hover:border-primary/50 transition-colors duration-500 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
-              <span className="counter-num font-body text-xs text-primary block mb-4" data-count="1">00</span>
-              <h4 className="font-display text-2xl mb-4 text-white group-hover:text-primary transition-colors">LE WOD</h4>
-              <p className="font-body text-gray-400 text-sm leading-relaxed">
-                Une heure ensemble, encadrée de A à Z. On s&apos;échauffe, on apprend, on se dépasse — et on finit toujours avec le sourire (même après les burpees).
-              </p>
-            </div>
-
-            {/* Carte Gym & Haltéro */}
-            <div className="service-card group border border-white/10 p-8 md:p-10 hover:border-primary/50 transition-colors duration-500 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
-              <span className="counter-num font-body text-xs text-primary block mb-4" data-count="2">00</span>
-              <h4 className="font-display text-2xl mb-4 text-white group-hover:text-primary transition-colors">GYM & HALTÉROPHILIE</h4>
-              <p className="font-body text-gray-400 text-sm leading-relaxed">
-                Envie de maîtriser les mouvements gymniques ou de soulever votre première barre ? Ces créneaux sont faits pour ça. Technique d&apos;abord, charge ensuite. Toujours avec un coach à côté.
-              </p>
-            </div>
-
-            {/* Carte Coaching */}
-            <div className="service-card group border border-white/10 p-8 md:p-10 hover:border-primary/50 transition-colors duration-500 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500 ease-in-out"></div>
-              <span className="counter-num font-body text-xs text-primary block mb-4" data-count="3">00</span>
-              <h4 className="font-display text-2xl mb-4 text-white group-hover:text-primary transition-colors">COACHING PERSONNALISÉ</h4>
-              <p className="font-body text-gray-400 text-sm leading-relaxed">
-                Un objectif précis ? Un retour de blessure ? Un défi sportif ? On construit ensemble un programme qui vous ressemble, avec un suivi régulier et humain.
-              </p>
-            </div>
-
+          <div className="services-grid grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-16">
+            {SERVICES.map((s, i) => (
+              <div key={s.n} className={`service-card relative isolate px-8 md:px-10 pt-14 pb-12 text-center ${i === 1 ? 'md:mt-12' : ''}`}>
+                <Splash variant={i + 2} className={`absolute -inset-x-4 -inset-y-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] ${s.color} -z-10 drop-shadow-[8px_10px_0_rgba(0,0,0,0.55)]`} style={{ transform: `rotate(${tilt(i + 3, 6)}deg)` }} />
+                <Sticker rot={tilt(i, 6)} tone="black" className="px-3 py-1 text-sm mb-5">
+                  <span className="counter-num" data-count={s.n}>00</span>
+                </Sticker>
+                <h4 className="font-display text-3xl mb-4 text-white">{s.title}</h4>
+                <p className="font-body text-white/90 text-sm leading-relaxed">{s.body}</p>
+              </div>
+            ))}
           </div>
 
-          <div className="reveal-on-scroll text-center mt-12">
-            <TransitionLink href="/planning" className="inline-block border border-white/20 px-8 py-4 font-display text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-              Voir le planning →
+          <div className="reveal-on-scroll text-center mt-16">
+            <TransitionLink href="/planning" className="inline-block">
+              <Sticker rot={-2} tone="white" className="px-6 py-3 text-sm md:text-base">Voir le planning →</Sticker>
             </TransitionLink>
           </div>
         </div>
       </section>
 
       {/* === 5. L'ÉQUIPE === */}
-      <section className="py-32 px-6 md:px-12 bg-[#080808] border-y border-white/10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="reveal-on-scroll font-body text-xs uppercase tracking-[0.3em] text-primary mb-6">/// L&apos;Équipe</h2>
-          <h3 className="reveal-on-scroll parallax-title font-display text-4xl md:text-7xl leading-[0.9] mb-10">
-            UNE ÉQUIPE PASSIONNÉE<br/><span className="text-primary">À VOS CÔTÉS</span>
+      <section className="py-32 px-6 md:px-12 relative isolate">
+        <JungleLeaves set="right" opacity={0.75} />
+        <div className="relative max-w-4xl mx-auto text-center">
+          <p className="reveal-on-scroll font-brush text-primary text-3xl md:text-4xl -rotate-2 mb-3">L&apos;équipe</p>
+          <h3 className="reveal-on-scroll font-display text-4xl md:text-7xl leading-[0.9] mb-10">
+            UNE ÉQUIPE PASSIONNÉE<br /><span className="text-primary">À VOS CÔTÉS</span>
           </h3>
-          <p className="reveal-on-scroll font-body text-gray-400 text-base leading-relaxed max-w-2xl mx-auto mb-8">
+          <p className="reveal-on-scroll font-body text-gray-300 text-base leading-relaxed max-w-2xl mx-auto mb-10">
             On ne compte pas les répétitions depuis un bureau. On est sur le plateau, avec vous, à chaque séance. On corrige, on motive, on plaisante — et quand vous battez un record, c&apos;est nous qui crions le plus fort. Notre porte est toujours ouverte : pour parler de votre programme, d&apos;un petit bobo, ou juste pour dire bonjour.
           </p>
           <div className="reveal-on-scroll">
-            <TransitionLink href="/contact" className="inline-block border border-white/20 px-8 py-4 font-display text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-              Rencontrer l&apos;équipe →
+            <TransitionLink href="/contact" className="inline-block">
+              <Sticker rot={2} tone="white" className="px-6 py-3 text-sm md:text-base">Rencontrer l&apos;équipe →</Sticker>
             </TransitionLink>
           </div>
         </div>
       </section>
 
       {/* === 6. CTA FINAL === */}
-      <section className="py-32 px-6 md:px-12 bg-bg">
-        <div className="max-w-4xl mx-auto text-center">
-          <h3 className="reveal-on-scroll parallax-title font-display text-4xl md:text-6xl mb-6">
-            PRÊT À REJOINDRE<br/><span className="text-primary">LA COMMUNAUTÉ ?</span>
+      <section className="py-32 px-6 md:px-12 relative isolate">
+        <Splash variant={1} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vmin] h-[70vmin] text-blood/35 -z-10" />
+        <div className="relative max-w-4xl mx-auto text-center">
+          <p className="reveal-on-scroll font-brush text-primary text-3xl md:text-4xl -rotate-2 mb-3">La tribu t&apos;attend</p>
+          <h3 className="reveal-on-scroll font-display text-4xl md:text-7xl leading-[0.9] mb-6">
+            PRÊT À REJOINDRE<br /><span className="text-primary">LA COMMUNAUTÉ ?</span>
           </h3>
-          <p className="reveal-on-scroll font-body text-gray-400 mb-6 max-w-xl mx-auto">
+          <p className="reveal-on-scroll font-body text-gray-200 mb-10 max-w-xl mx-auto">
             Passez nous voir, sans engagement. On vous fait visiter, on vous offre un café, et si le courant passe — votre première séance est offerte.
           </p>
 
-          <div className="cta-buttons flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
-            <TransitionLink href="/planning" className="inline-block bg-primary text-white font-display text-xl px-12 py-5 uppercase tracking-wider hover:bg-white hover:text-black transition-colors text-center">
-              Réserver ma séance d&apos;essai
+          <div className="cta-buttons flex flex-col sm:flex-row justify-center items-center gap-5 sm:gap-8">
+            <TransitionLink href="/planning" className="inline-block">
+              <Sticker rot={-2} tone="red" className="px-8 py-4 text-lg md:text-xl">Réserver ma séance d&apos;essai</Sticker>
             </TransitionLink>
-            <TransitionLink href="/contact" className="inline-block border border-white/20 text-white font-display text-xl px-12 py-5 uppercase tracking-wider hover:bg-white hover:text-black transition-all text-center">
-              Nous contacter
+            <TransitionLink href="/contact" className="inline-block">
+              <Sticker rot={2} tone="white" className="px-8 py-4 text-lg md:text-xl">Nous contacter</Sticker>
             </TransitionLink>
           </div>
         </div>

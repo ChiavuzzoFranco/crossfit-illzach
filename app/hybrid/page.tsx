@@ -2,6 +2,8 @@
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import TransitionLink from '@/components/TransitionLink';
+import JungleLeaves from '@/components/jungle/JungleLeaves';
+import { Splash, Sticker, TORN } from '@/components/jungle/ui';
 import { hybridStore, STATION_COUNT, RUN_PART, raceKm } from '@/components/hybrid/store';
 import { SCHEDULE, DAYS } from '@/lib/schedule';
 
@@ -176,7 +178,8 @@ export default function HybridPage() {
 
       // La 3D s'arrête quand on a dépassé la section ATHX
       const athxRect = athxRef.current?.getBoundingClientRect();
-      const isActive = !athxRect || athxRect.bottom > -vh * 0.1;
+      // la 3D s'efface dès la fin des monolithes (fondu, pas de coupure)
+      const isActive = !athxRect || athxRect.bottom > vh * 0.55;
       if (isActive !== lastActive) { lastActive = isActive; setActive(isActive); }
 
       raf = requestAnimationFrame(loop);
@@ -206,7 +209,7 @@ export default function HybridPage() {
       <section ref={heroRef} className="relative z-10 h-[100svh] pointer-events-none">
         <div className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-bg via-bg/70 to-transparent md:from-bg/60 md:via-bg/20" />
         <div ref={heroText} className="absolute inset-x-0 bottom-0 px-4 md:px-12 pb-10 md:pb-14 will-change-transform">
-          <p className="font-body text-[11px] md:text-xs uppercase tracking-[0.35em] text-gray-400 mb-4 md:mb-6">
+          <p className="font-brush text-primary text-2xl md:text-4xl -rotate-2 mb-2 md:mb-3">
             Entraînement hybride · CrossFit Illzach
           </p>
           <h1 className="font-display uppercase leading-[0.82] text-[22vw] md:text-[15vw]">
@@ -231,24 +234,25 @@ export default function HybridPage() {
       <section className="relative z-10 min-h-[100svh] flex items-center px-4 md:px-12 py-28">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-bg/90 to-bg/40 pointer-events-none" />
         <div className="relative max-w-6xl mx-auto w-full">
-          <p className="reveal-on-scroll font-body text-[10px] uppercase tracking-[0.35em] text-gray-400 mb-4">Deux formats, une box</p>
+          <p className="reveal-on-scroll font-brush text-primary text-2xl md:text-3xl -rotate-2 mb-4">Deux formats, une box</p>
           <h2 className="reveal-on-scroll font-display uppercase text-5xl md:text-7xl leading-[0.9] mb-12 md:mb-16">
             C&apos;est quoi <span className="text-primary">?</span>
           </h2>
 
-          <div className="grid md:grid-cols-2 gap-px bg-white/10 border border-white/10">
-            {INTRO.map((f) => (
-              <article key={f.name} className="reveal-on-scroll bg-bg/85 p-6 md:p-10 flex flex-col">
+          <div className="grid md:grid-cols-2 gap-x-10 gap-y-16">
+            {INTRO.map((f, fi) => (
+              <article key={f.name} className="reveal-on-scroll relative isolate p-8 md:p-12 flex flex-col">
+                <Splash variant={fi + 3} className={`absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] ${f.accent ? 'text-primary/85' : 'text-blood/85'} -z-10 drop-shadow-[8px_10px_0_rgba(0,0,0,0.55)]`} style={{ transform: `rotate(${fi ? 3 : -3}deg)` }} />
                 <div className="flex items-baseline justify-between gap-4 mb-5">
-                  <h3 className={`font-display text-4xl md:text-5xl ${f.accent ? 'text-primary' : 'text-white'}`}>{f.name}</h3>
-                  <span className="font-body text-[10px] uppercase tracking-[0.25em] text-gray-400 text-right">{f.tagline}</span>
+                  <h3 className="font-display text-4xl md:text-5xl text-white">{f.name}</h3>
+                  <Sticker rot={fi ? 3 : -3} tone="black" className="px-2.5 py-1 text-[11px] text-right">{f.tagline}</Sticker>
                 </div>
-                <p className="font-body text-gray-300 leading-relaxed mb-8 flex-1">{f.desc}</p>
-                <div className="grid grid-cols-3 border-t border-white/10 pt-5">
+                <p className="font-body text-white leading-relaxed mb-8 flex-1">{f.desc}</p>
+                <div className="grid grid-cols-3 border-t border-white/30 pt-5">
                   {f.stats.map(([v, l]) => (
                     <div key={l}>
                       <p className="font-display text-2xl md:text-3xl leading-none mb-1">{v}</p>
-                      <p className="font-body text-[10px] uppercase tracking-[0.2em] text-gray-500">{l}</p>
+                      <p className="font-body text-[10px] uppercase tracking-[0.2em] text-white/75">{l}</p>
                     </div>
                   ))}
                 </div>
@@ -273,36 +277,36 @@ export default function HybridPage() {
           {/* HUD haut */}
           <div className="absolute top-24 md:top-28 inset-x-0 px-4 md:px-12 flex justify-between items-start font-display">
             <div>
-              <p className="text-[10px] tracking-[0.35em] text-gray-400 font-body uppercase mb-1">Hyrox · Distance</p>
+              <p className="font-brush text-primary text-lg md:text-xl -rotate-2 mb-1">Hyrox · distance</p>
               <p className="text-4xl md:text-6xl tabular-nums leading-none">
                 <span ref={kmRef}>0.00</span><span className="text-primary text-xl md:text-2xl ml-1">KM</span>
               </p>
             </div>
             <div className="text-right">
-              <p className="text-[10px] tracking-[0.35em] text-gray-400 font-body uppercase mb-1">Chrono</p>
+              <p className="font-brush text-primary text-lg md:text-xl -rotate-2 mb-1">Chrono</p>
               <p className="text-4xl md:text-6xl tabular-nums leading-none"><span ref={chronoRef}>00:00:00</span></p>
             </div>
           </div>
 
           {/* Fiche étape */}
           <div className="absolute bottom-8 md:bottom-12 left-4 right-4 md:left-12 md:right-auto md:w-[440px]">
-            <div key={`${step.kind}-${step.i}`} className="hx-in border border-white/10 bg-black/45 backdrop-blur-md p-6 md:p-8">
+            <div key={`${step.kind}-${step.i}`} className="hx-in bg-[#f3eee6] text-bg p-6 md:p-8 -rotate-1 drop-shadow-[10px_12px_0_rgba(0,0,0,0.6)]" style={{ clipPath: TORN }}>
               {step.kind === 'run' ? (
                 <>
-                  <p className="font-body text-[10px] uppercase tracking-[0.35em] text-gray-400 mb-3">Run {String(step.i + 1).padStart(2, '0')} / 08</p>
+                  <p className="font-brush text-primary text-xl -rotate-1 mb-2">Run {String(step.i + 1).padStart(2, '0')} / 08</p>
                   <h2 className="font-display text-4xl md:text-5xl leading-none mb-3"><Scramble text="1000 M RUN" /></h2>
-                  <p className="font-body text-sm text-gray-400 leading-relaxed">
-                    Entre chaque station, un kilomètre de course. Prochaine station : <span className="text-white">{st.name}</span>.
+                  <p className="font-body text-sm text-bg/75 leading-relaxed">
+                    Entre chaque station, un kilomètre de course. Prochaine station : <span className="font-semibold text-bg">{st.name}</span>.
                   </p>
                 </>
               ) : (
                 <>
                   <div className="flex items-center justify-between mb-3">
-                    <p className="font-body text-[10px] uppercase tracking-[0.35em] text-gray-400">Station {st.id} / 08</p>
-                    <span className="font-display text-xs tracking-widest text-primary border border-primary/30 px-3 py-1">{st.dist}</span>
+                    <p className="font-brush text-primary text-xl -rotate-1">Station {st.id} / 08</p>
+                    <Sticker rot={3} tone="red" className="px-3 py-1 text-xs">{st.dist}</Sticker>
                   </div>
-                  <h2 className="font-display text-4xl md:text-5xl leading-none mb-3 text-white"><Scramble text={st.name} /></h2>
-                  <p className="font-body text-sm text-gray-400 leading-relaxed">{st.desc}</p>
+                  <h2 className="font-display text-4xl md:text-5xl leading-none mb-3"><Scramble text={st.name} /></h2>
+                  <p className="font-body text-sm text-bg/75 leading-relaxed">{st.desc}</p>
                 </>
               )}
             </div>
@@ -324,7 +328,7 @@ export default function HybridPage() {
       <section className="relative z-10 min-h-[80svh] flex items-center px-4 md:px-12 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-bg/75 to-transparent" />
         <div className="relative max-w-3xl">
-          <p className="reveal-on-scroll font-body text-[10px] uppercase tracking-[0.35em] text-gray-400 mb-4">Finish line · 8,00 km</p>
+          <p className="reveal-on-scroll font-brush text-primary text-2xl md:text-3xl -rotate-2 mb-4">Finish line · 8,00 km</p>
           <h2 className="reveal-on-scroll font-display uppercase text-[14vw] md:text-[8vw] leading-[0.95] mb-6">
             <span className="block text-white/90">Next level :</span>
             <span className="block text-transparent" style={{ WebkitTextStroke: '1.5px #FF2E00' }}>ATHX.</span>
@@ -339,7 +343,7 @@ export default function HybridPage() {
       <section ref={athxRef} className="relative z-10 h-[360svh]">
         <div className="sticky top-0 h-[100svh] pointer-events-none">
           <div className="absolute top-24 md:top-28 left-4 md:left-12">
-            <p className="font-body text-[10px] uppercase tracking-[0.35em] text-gray-400 mb-2">ATHX · 3 zones notées</p>
+            <p className="font-brush text-primary text-2xl md:text-3xl -rotate-2 mb-2">ATHX · 3 zones notées</p>
             <p className="font-display text-5xl md:text-7xl leading-none">ATHX</p>
           </div>
 
@@ -348,22 +352,24 @@ export default function HybridPage() {
           </div>
 
           <div className="absolute bottom-8 md:bottom-12 left-4 right-4 md:left-auto md:right-24 md:w-[440px]">
-            <div key={zone} className="hx-in border border-white/10 bg-black/45 backdrop-blur-md p-6 md:p-8">
+            <div key={zone} className="hx-in bg-[#f3eee6] text-bg p-6 md:p-8 rotate-1 drop-shadow-[10px_12px_0_rgba(0,0,0,0.6)]" style={{ clipPath: TORN }}>
               <div className="flex items-center justify-between mb-3">
-                <p className="font-body text-[10px] uppercase tracking-[0.35em] text-gray-400">Zone {ZONES[zone].id} / 03</p>
-                <span className="font-display text-xs tracking-widest text-primary border border-primary/30 px-3 py-1 uppercase">{ZONES[zone].kicker}</span>
+                <p className="font-brush text-primary text-xl -rotate-1">Zone {ZONES[zone].id} / 03</p>
+                <Sticker rot={-3} tone="red" className="px-3 py-1 text-xs">{ZONES[zone].kicker}</Sticker>
               </div>
               <h2 className="font-display text-4xl md:text-5xl leading-none mb-3"><Scramble text={ZONES[zone].name} /></h2>
-              <p className="font-body text-sm text-gray-400 leading-relaxed">{ZONES[zone].desc}</p>
+              <p className="font-body text-sm text-bg/75 leading-relaxed">{ZONES[zone].desc}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* --- COMPARATIF --- */}
-      <section className="relative z-10 bg-bg border-t border-white/10 px-4 md:px-12 py-24 md:py-32">
+      <section className="relative z-10 isolate px-4 md:px-12 py-24 md:py-32">
+        <div className="absolute inset-x-0 -top-[40svh] h-[40svh] bg-gradient-to-b from-transparent to-bg pointer-events-none -z-10" />
+        <JungleLeaves set="right" opacity={0.8} />
         <div className="max-w-6xl mx-auto">
-          <p className="font-body text-[10px] uppercase tracking-[0.35em] text-gray-400 mb-4">Comparatif</p>
+          <p className="font-brush text-primary text-2xl md:text-3xl -rotate-2 mb-4">Comparatif</p>
           <h2 className="font-display text-5xl md:text-8xl leading-[0.9] uppercase mb-14 md:mb-20">
             Deux courses.<br /><span className="text-primary">Une préparation.</span>
           </h2>
@@ -388,11 +394,12 @@ export default function HybridPage() {
       </section>
 
       {/* --- NIVEAUX --- */}
-      <section className="relative z-10 bg-bg px-4 md:px-12 pb-24 md:pb-32">
+      <section className="relative z-10 isolate px-4 md:px-12 pb-24 md:pb-32">
+        <JungleLeaves set="left" opacity={0.75} />
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-[1fr_2fr] gap-10 md:gap-16 border-t border-white/15 pt-14 md:pt-20">
             <div>
-              <p className="font-body text-[10px] uppercase tracking-[0.35em] text-gray-400 mb-4">Pour tous les niveaux</p>
+              <p className="font-brush text-primary text-2xl md:text-3xl -rotate-2 mb-4">Pour tous les niveaux</p>
               <h2 className="font-display text-5xl md:text-6xl uppercase leading-[0.9] mb-6">
                 Pas besoin<br />d&apos;être <span className="text-primary">athlète.</span>
               </h2>
@@ -428,32 +435,33 @@ export default function HybridPage() {
       </section>
 
       {/* --- PLANNING HYBRIDE --- */}
-      <section className="relative z-10 bg-[#0A0A0A] border-y border-white/5 px-4 md:px-12 py-24 md:py-32">
+      <section className="relative z-10 isolate px-4 md:px-12 py-24 md:py-32">
+        <JungleLeaves set="corners" opacity={0.8} />
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <div>
-              <p className="font-body text-[10px] uppercase tracking-[0.35em] text-gray-400 mb-4">Les créneaux</p>
+              <p className="font-brush text-primary text-2xl md:text-3xl -rotate-2 mb-4">Les créneaux</p>
               <h2 className="font-display text-5xl md:text-7xl uppercase leading-none">S&apos;entraîner</h2>
             </div>
-            <TransitionLink href="/planning" className="font-display uppercase tracking-widest text-sm text-gray-400 hover:text-primary transition-colors">
+            <TransitionLink href="/planning" className="font-display uppercase tracking-widest text-sm text-white hover:text-primary transition-colors">
               Planning complet →
             </TransitionLink>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-l border-t border-white/10">
-            {hybridSlots.map((s) => {
+          <div className="flex flex-wrap gap-5">
+            {hybridSlots.map((s, i) => {
               const creneau = `${s.day} ${s.time} - ${s.type}`;
               return (
                 <TransitionLink
                   key={creneau}
                   href={`/contact?creneau=${encodeURIComponent(creneau)}`}
-                  className="group border-r border-b border-white/10 hover:bg-white/[0.03] transition-colors p-6 flex items-center justify-between"
+                  className="group inline-block transition-transform hover:-translate-y-1"
                 >
-                  <div>
-                    <p className="font-body text-[10px] uppercase tracking-[0.3em] text-gray-500 mb-1">{s.day}</p>
-                    <p className="font-display text-2xl"><span className="text-primary">{s.time}</span> &nbsp;{s.type}</p>
-                  </div>
-                  <span className="font-body text-[11px] uppercase tracking-widest text-primary opacity-60 group-hover:opacity-100 transition-opacity">Réserver →</span>
+                  <Sticker rot={((i * 7) % 5) - 2} tone={/ATHX/.test(s.type) ? 'red' : 'white'} className="px-4 py-3 text-left">
+                    <span className="block font-body text-[10px] tracking-[0.3em] opacity-70">{s.day}</span>
+                    <span className="block text-2xl md:text-3xl leading-none tabular-nums mt-1">{s.time}</span>
+                    <span className="block text-sm mt-1">{s.type} <span className="opacity-0 group-hover:opacity-80 transition-opacity">→</span></span>
+                  </Sticker>
                 </TransitionLink>
               );
             })}
@@ -462,17 +470,14 @@ export default function HybridPage() {
       </section>
 
       {/* --- CTA --- */}
-      <section className="relative z-10 bg-bg px-4 md:px-12 py-28 md:py-40 text-center overflow-hidden">
+      <section className="relative z-10 isolate px-4 md:px-12 py-28 md:py-40 text-center">
+        <Splash variant={1} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vmin] h-[70vmin] text-blood/35 -z-10" />
         <h2 className="font-display uppercase text-[16vw] md:text-[11vw] leading-[0.82] mb-10">
           <span className="block">Your race.</span>
           <span className="block text-transparent" style={{ WebkitTextStroke: '2px #FF2E00' }}>Your pace.</span>
         </h2>
-        <TransitionLink
-          href="/contact"
-          className="group relative inline-block w-full md:w-auto px-14 py-6 border border-primary text-primary font-display text-lg md:text-xl uppercase tracking-widest overflow-hidden transition-colors duration-300 hover:text-white"
-        >
-          <span className="relative z-10">Commencer la préparation</span>
-          <span className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+        <TransitionLink href="/contact" className="inline-block">
+          <Sticker rot={-2} tone="red" className="px-10 py-5 text-lg md:text-2xl">Commencer la préparation →</Sticker>
         </TransitionLink>
       </section>
     </main>
